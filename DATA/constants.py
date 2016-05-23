@@ -26,3 +26,24 @@ def str_is_invalid(str_u):
 		if(ord(char_u)>=128 or char_u=="'"):
 			return True
 	return False
+
+#TEXT
+MAIN_TITLE				= "Reporte de Asistencias"
+MAIN_VIEW_TITLE			= "Sistema:\nReportes de Asistencias"
+BUTTON_INSERT_WORKER	= "Insertar Trabajador"
+BUTTON_MARKS			= "Insertar Marcacion"
+BUTTON_MARKS_FROM_FILE	= "Insertar Marcaciones desde un archivo"
+BUTTON_MODIFY_WORKER	= "Modificar Trabajador"
+BUTTON_EXIT				= "Salir"
+#NUMBERS
+GRID_X_MAIN_WINDOW						= 3
+GRID_Y_MAIN_WINDOW						= 15
+GRID_X_POSITION_TITLE					= 0
+GRID_X_POSITION_INSERT_WORKER			= 2
+GRID_X_POSITION_INSERT_MARKS			= 3
+GRID_X_POSITION_INSERT_MARKS_FROM_FILE	= 4
+GRID_X_POSITION_MODIFY_WORKER			= 5
+GRID_X_POSITION_EXIT					= 14
+GRID_Y_POSITION_BUTTON					= 1
+BUTTON_SIZE_MAIN_VIEW					= 250
+FONT_TITLE_SIZE							= 18

@@ -13,14 +13,10 @@ from constants import *
 db=get_connection()
 cursor=db.cursor()
 
-cursor.execute("""CREATE TABLE Trabajador
-				(
-				pin varchar(8) PRIMARY KEY,
-				name varchar(30),
-				father_last_name varchar(30),
-				mother_last_name varchar(30),
-				activo boolean
-				)""")
+cursor.execute("SELECT * FROM Marcacion")
+
+for row in cursor:
+	print row
 
 db.commit()
 db.close()
