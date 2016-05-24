@@ -10,22 +10,25 @@ from PyQt4.QtGui import *
 BASE_DIR='../'
 sys.path.insert(0,BASE_DIR)
 from constants import *
+from views.admin import insert_worker_view
 
-class main_view(QWidget):
+class main_view_admin(QWidget):
 	def __init__(self):
-		super(main_view, self).__init__()
+		self.ventana=None
+		super(main_view_admin, self).__init__()
 		self.main_view_create()
 		screenGeometry = QApplication.desktop().availableGeometry()
 		self.resize(screenGeometry.width()/3,screenGeometry.height()-100)
 		self.setWindowTitle(MAIN_TITLE)
 		self.show()
+		self.singleton_widget=False
 
 	def main_view_create(self):
 		#GRID
 		grid = QGridLayout()
 
 		#WIDGETS
-		label_title = QLabel(MAIN_VIEW_TITLE)
+		label_title = QLabel(MAIN_VIEW_TITLE_ADMIN)
 		button_insert_worker = QPushButton(BUTTON_INSERT_WORKER,self)
 		button_insert_marks = QPushButton(BUTTON_MARKS,self)
 		button_insert_marks_from_file = QPushButton(BUTTON_MARKS_FROM_FILE,self)
@@ -50,8 +53,8 @@ class main_view(QWidget):
 		self.connect(button_exit, SIGNAL("clicked()"),self.close)
 
 		#GRID SIZE
-		grid.setHorizontalSpacing(GRID_X_MAIN_WINDOW)
-		grid.setVerticalSpacing(GRID_Y_MAIN_WINDOW)
+		grid.setHorizontalSpacing(GRID_X_MAIN_WINDOW_ADMIN)
+		grid.setVerticalSpacing(GRID_Y_MAIN_WINDOW_ADMIN)
 
 		#WIDGETS TO GRID
 		grid.addWidget(label_title,GRID_X_POSITION_TITLE,GRID_Y_POSITION_BUTTON)
@@ -65,10 +68,35 @@ class main_view(QWidget):
 		self.setLayout(grid)
 
 	def insert_worker(self):
-		print "insert_worker"
+		if(self.singleton_widget):
+			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
+		else:
+			self.singleton_widget=True
+			self.ventana = insert_worker_view.insert_worker_view()
+			self.ventana.exec_()
+			self.ventana=None
+			self.singleton_widget=False
 	def modify_worker(self):
-		print "modify_worker"
+		if(self.singleton_widget):
+			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
+		else:
+			self.singleton_widget=True
+			print "modify_worker"
+			self.singleton_widget=False
 	def insert_marks(self):
-		print "marks"
+		if(self.singleton_widget):
+			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
+		else:
+			self.singleton_widget=True
+			print "insert_marks"
+			self.singleton_widget=False
 	def insert_marks_from_file(self):
-		print "marks_from_file"
+		if(self.singleton_widget):
+			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
+		else:
+			self.singleton_widget=True
+			print "insert_marks_from_file"
+			self.singleton_widget=False
+	def closeEvent(self, evnt):
+		if(self.ventana):
+			self.ventana.close()
