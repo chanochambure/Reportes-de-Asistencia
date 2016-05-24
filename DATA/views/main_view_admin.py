@@ -10,7 +10,7 @@ from PyQt4.QtGui import *
 BASE_DIR='../'
 sys.path.insert(0,BASE_DIR)
 from constants import *
-from views.admin import insert_worker_view
+from views.admin import insert_worker_view,modify_worker_view
 
 class main_view_admin(QWidget):
 	def __init__(self):
@@ -18,7 +18,7 @@ class main_view_admin(QWidget):
 		super(main_view_admin, self).__init__()
 		self.main_view_create()
 		screenGeometry = QApplication.desktop().availableGeometry()
-		self.resize(screenGeometry.width()/3,screenGeometry.height()-100)
+		self.resize(screenGeometry.width()/4,screenGeometry.height()/2)
 		self.setWindowTitle(MAIN_TITLE)
 		self.show()
 		self.singleton_widget=False
@@ -81,7 +81,9 @@ class main_view_admin(QWidget):
 			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
 		else:
 			self.singleton_widget=True
-			print "modify_worker"
+			self.ventana = modify_worker_view.modify_worker_view()
+			self.ventana.exec_()
+			self.ventana=None
 			self.singleton_widget=False
 	def insert_marks(self):
 		if(self.singleton_widget):
