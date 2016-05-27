@@ -52,8 +52,8 @@ class insert_worker_view(QDialog):
 		self.connect(button_create, SIGNAL("clicked()"),self.create_worker)
 
 		#GRID SIZE
-		grid.setHorizontalSpacing(GRID_X_MAIN_WINDOW_ADMIN)
-		grid.setVerticalSpacing(GRID_Y_MAIN_WINDOW_ADMIN)
+		grid.setHorizontalSpacing(ADMIN_INSERT_WORKER_X)
+		grid.setVerticalSpacing(ADMIN_INSERT_WORKER_Y)
 
 		#WIDGETS TO GRID
 		grid.addWidget(label_title,GRID_X_POSITION_INSERT_WORK_TITLE,GRID_Y_POSITION_INSERT_WORK_TITLE)
@@ -88,9 +88,10 @@ class insert_worker_view(QDialog):
 				db=get_connection()
 				if(db):
 					new_worker = trabajador.Trabajador([pin,name,fname,mname,True])
-					if(controller_trabajador.pin_is_invalid(pin,db)):
+					if(controller_trabajador.pin_exist(pin,db)):
 						QMessageBox.warning(self, 'Error',CREATE_WORKER_ALREADY_HAS_BEEN_USED, QMessageBox.Ok)
 					elif(new_worker.insert(db.cursor())):
 						db.commit()
 						db.close()
+						QMessageBox.question(self, 'Message',CREATE_WORKER_SUCCESS,QMessageBox.Ok)
 						self.close()

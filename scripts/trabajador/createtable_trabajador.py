@@ -15,7 +15,7 @@ cursor=db.cursor()
 
 cursor.execute("""CREATE TABLE Trabajador
 				(
-				pin varchar(8) PRIMARY KEY,
+				pin varchar(15) PRIMARY KEY,
 				name varchar(30),
 				father_last_name varchar(30),
 				mother_last_name varchar(30),
