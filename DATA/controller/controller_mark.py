@@ -27,44 +27,32 @@ def valid_date(str_datetime,tipo=True):
 		return past>actual
 	return True
 
-class class_insert_from_filepath(QtCore.QThread):
-	finished 	= QtCore.pyqtSignal()
-	data		= 0
-	def __init__(self,path):
-		self.file_path=path
-		QtCore.QThread.__init__(self)
-
-	def run(self):
-		self.data=self.insert_from_filepath(self.file_path)
-		self.finished.emit()
-		self.fthread.terminate()
-
-	def insert_from_filepath(self,filepath):
-		if(filepath.length()==0):
+def insert_from_filepath(filepath):
+	if(filepath.length()==0):
+		return ERROR_FILE
+	db=get_connection()
+	if(db):
+		try:
+			file = open(unicode(filepath),'r')
+			cont=0
+			file.readline()
+			for line in file:
+				listline=line.split(',')
+				if(len(listline)!=COLUMNS_IN_FILE):
+					return ERROR_FILE
+				str_pin=listline[2]
+				str_pin=str_pin[0:len(str_pin)-1]
+				str_datetime=listline[1]
+				if(controller_trabajador.pin_exist(str_pin,db,True) and valid_date(str_datetime,False)==False):
+					datetime_data=to_datetime(str_datetime,False)
+					str_datetime=str(datetime_data)
+					if(has_a_check(str_pin,str_datetime,db)==False):
+						new_mark = mark.Marcacion([0,str_pin,str_datetime])
+						if(new_mark.insert(db.cursor())):
+							cont+=1
+			db.commit()
+			db.close()
+			return cont
+		except IOError:
 			return ERROR_FILE
-		db=get_connection()
-		if(db):
-			try:
-				file = open(unicode(filepath),'r')
-				cont=0
-				file.readline()
-				for line in file:
-					listline=line.split(',')
-					if(len(listline)!=COLUMNS_IN_FILE):
-						return ERROR_FILE
-					str_pin=listline[2]
-					str_pin=str_pin[0:len(str_pin)-1]
-					str_datetime=listline[1]
-					if(controller_trabajador.pin_exist(str_pin,db,True) and valid_date(str_datetime,False)==False):
-						datetime_data=to_datetime(str_datetime,False)
-						str_datetime=str(datetime_data)
-						if(has_a_check(str_pin,str_datetime,db)==False):
-							new_mark = mark.Marcacion([0,str_pin,str_datetime])
-							if(new_mark.insert(db.cursor())):
-								cont+=1
-				db.commit()
-				db.close()
-				return cont
-			except IOError:
-				return ERROR_FILE
-		return -2
+	return -2

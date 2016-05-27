@@ -114,28 +114,13 @@ class main_view_admin(QWidget):
 			self.singleton_widget=True
 			self.ventana = QFileDialog()
 			filepath = self.ventana.getOpenFileName(self, TITLE_FILE_DIALOG, "", DATA_TYPE_FILE_DIALOG)
-			self.RunProgressBar(filepath)
-
-	def RunProgressBar(self,filepath):
-		self.progress = QProgressDialog("Running",QString(),0,0,self) 
-		self.progress.setWindowTitle('Please wait...')
-		self.progress.setWindowModality(Qt.WindowModal)
-		self.progress.canceled.connect(self.progress.close)
-		self.progress.show()
-		self.fthread = controller_mark.class_insert_from_filepath(filepath)
-		self.fthread.finished.connect(self.TT_Finished)
-		self.progress.canceled.connect(self.progress.close)
-		self.progress.show()
-		self.fthread.start()
-
-	def TT_Finished(self):
-		self.progress.close()
-		data=self.fthread.data
-		if(data>=0):
-			QMessageBox.question(self, 'Message',DATA_INSERTED_FROM_FILE+str(data), QMessageBox.Ok)
-		elif(data==ERROR_FILE):
-			QMessageBox.warning(self, 'Error',ERROR_WITH_THE_FILE, QMessageBox.Ok)
-		self.singleton_widget=False
+			if(filepath.length()):
+				data=controller_mark.insert_from_filepath(filepath)
+				if(data>=0):
+					QMessageBox.question(self, 'Message',DATA_INSERTED_FROM_FILE+str(data), QMessageBox.Ok)
+				elif(data==ERROR_FILE):
+					QMessageBox.warning(self, 'Error',ERROR_WITH_THE_FILE, QMessageBox.Ok)
+			self.singleton_widget=False
 
 	def closeEvent(self, evnt):
 		if(self.ventana):
