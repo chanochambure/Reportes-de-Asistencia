@@ -19,7 +19,10 @@ cursor.execute("""CREATE TABLE Trabajador
 				name varchar(30),
 				father_last_name varchar(30),
 				mother_last_name varchar(30),
-				activo boolean
+				activo boolean,
+				hora_entrada TIME,
+				hora_salida TIME,
+				idlt int
 				)""")
 
 db.commit()

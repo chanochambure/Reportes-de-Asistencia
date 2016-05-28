@@ -13,9 +13,11 @@ from models import *
 from constants import *
 from controller import controller_trabajador
 
-def has_a_check(pin,str_datetime,db):
+def has_a_check(pin,str_datetime,db,valid=True):
 	cursor=db.cursor()
 	select_marks="select * from Marcacion where pin='%s' and hour='%s'"%(pin,str_datetime)
+	if(valid):
+		select_marks+=" and valido=1"
 	cursor.execute(select_marks)
 	rows = cursor.fetchall()
 	return len(rows)>0
@@ -47,7 +49,7 @@ def insert_from_filepath(filepath):
 					datetime_data=to_datetime(str_datetime,False)
 					str_datetime=str(datetime_data)
 					if(has_a_check(str_pin,str_datetime,db)==False):
-						new_mark = mark.Marcacion([0,str_pin,str_datetime])
+						new_mark = mark.Marcacion([0,str_pin,str_datetime,True])
 						if(new_mark.insert(db.cursor())):
 							cont+=1
 			db.commit()

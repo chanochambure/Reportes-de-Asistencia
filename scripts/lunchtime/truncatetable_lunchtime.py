@@ -13,13 +13,7 @@ from constants import *
 db=get_connection()
 cursor=db.cursor()
 
-cursor.execute("""CREATE TABLE Marcacion
-				(
-				id int PRIMARY KEY AUTO_INCREMENT,
-				pin varchar(15),
-				hour DATETIME,
-				valido boolean
-				)""")
+cursor.execute("TRUNCATE Lunchtime")
 
 db.commit()
 db.close()

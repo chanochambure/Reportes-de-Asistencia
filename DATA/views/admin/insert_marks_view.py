@@ -94,7 +94,7 @@ class insert_marks_view(QDialog):
 		if reply == QMessageBox.Yes:
 			db=get_connection()
 			if(db):
-				new_mark = mark.Marcacion([0,self.worker.pin,str_datetime])
+				new_mark = mark.Marcacion([0,self.worker.pin,str_datetime,True])
 				if(controller_mark.has_a_check(new_mark.pin,new_mark.hora,db)):
 					QMessageBox.warning(self, 'Error',WORKER_HAVE_ALREADY_THIS_MARK, QMessageBox.Ok)
 				elif(controller_mark.valid_date(new_mark.hora)):

@@ -4,20 +4,28 @@
 import MySQLdb
 import sys
 import datetime
+import time
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import BDconf
 
-def get_connection():
+def get_connection(showError=True):
 	try:
 		return MySQLdb.connect(BDconf.DATABASE_HOST,BDconf.DATABASE_USER,BDconf.DATABASE_PASSWORD,BDconf.DATABASE_NAME)
 	except MySQLdb.Error as err:
-		QMessageBox.warning(None, 'Error',"Error al Conectar con la Base De Datos", QMessageBox.Ok)
+		if(showError):
+			QMessageBox.warning(None, 'Error',"Error al Conectar con la Base De Datos", QMessageBox.Ok)
 		return None
 
 #TIME
 def datetime_to_str(day,month,year,hour,minute):
 	return year+"-"+month+"-"+day+" "+hour+":"+minute+":00"
+
+def get_actual_date():
+	return time.strftime("%Y-%m-%d")
+
+def time_to_str(hour,minute):
+	return hour+":"+minute+":00"
 
 def to_datetime(str_datetime,tipo):
 	try:
@@ -58,11 +66,15 @@ ADMIN_INSERT_WORKER_PIN				= "Numero de Identificacion"
 ADMIN_INSERT_WORKER_NAME			= "Nombre"
 ADMIN_INSERT_WORKER_FNAME			= "Apellido Paterno"
 ADMIN_INSERT_WORKER_MNAME			= "Apellido Materno"
+ADMIN_INSERT_INTRO_HOUR				= "Hora de Entrada"
+ADMIN_INSERT_EXIT_HOUR				= "Hora de Salida"
+ADMIN_INSERT_LUNCHTIME_MINUTES		= "Tiempo de Refrigerio"
 BUTTON_CREATE_WORKER				= "Insertar"
 BUTTON_BACK							= "Atras"
 CREATE_WORKER_EMPTY_CAMP			= "Existe algun Campo Vacio"
 CREATE_WORKER_INVALID_CAMP			= "Existe caracteres no validos"
 CREATE_WORKER_INVALID_PIN			= "El PIN solo puede tener caracteres numericos"
+CREATE_WORKER_INVALID_LT_MINUTES	= "El tiempo de refrigerio solo puede tener caracteres numericos"
 CREATE_WORKER_QUESTION				= "Esta seguro de crear a este nuevo Trabajador"
 CREATE_WORKER_SUCCESS				= "Trabajador Creado"
 CREATE_WORKER_BD_ERROR				= "Error con la Base de Datos"
@@ -93,6 +105,8 @@ TITLE_FILE_DIALOG					= "Abrir Archivo"
 DATA_TYPE_FILE_DIALOG				= "CSV data files (*.csv)"
 DATA_INSERTED_FROM_FILE				= "Marcaciones Insertados desde el Archivo: "
 ERROR_WITH_THE_FILE					= "Hubo un error al leer el archivo, puede estar corrompido"
+FIRST_DATE								= "01/01/01"
+
 #NUMBERS
 GRID_X_MAIN_WINDOW_ADMIN				= 3
 GRID_Y_MAIN_WINDOW_ADMIN				= 7
@@ -107,7 +121,7 @@ BUTTON_SIZE_MAIN_VIEW					= 250
 FONT_TITLE_SIZE							= 18
 
 ADMIN_INSERT_WORKER_X					= 7
-ADMIN_INSERT_WORKER_Y					= 2
+ADMIN_INSERT_WORKER_Y					= 5
 BUTTON_SIZE_INSERT_WORKER_VIEW_X		= 300
 BUTTON_SIZE_INSERT_WORKER_VIEW_Y		= 50
 GRID_X_POSITION_CREATE_INSERT_WORK		= 6
@@ -118,8 +132,14 @@ GRID_X_POSITION_PIN						= 2
 GRID_X_POSITION_NAME					= 3
 GRID_X_POSITION_FNAME					= 4
 GRID_X_POSITION_MNAME					= 5
+GRID_X_POSITION_IHOUR					= 2
+GRID_X_POSITION_EHOUR					= 3
+GRID_X_POSITION_LUNCH					= 5
 GRID_Y_POSITION_LABEL					= 0
 GRID_Y_POSITION_TEXT					= 1
+GRID_Y_POSITION_LABEL_HOUR				= 2
+GRID_Y_POSITION_HOUR_INSERT				= 3
+GRID_Y_POSITION_MIN_INSERT				= 4
 GRID_X_POSITION_INSERT_WORK_TITLE		= 0
 GRID_Y_POSITION_INSERT_WORK_TITLE		= 0
 
@@ -147,7 +167,7 @@ SIZE_COLUMNS_TABLE_WORKERS				= 4
 BUTTON_SIZE_MOD_WORKER_VIEW_X			= 150
 BUTTON_SIZE_MOD_WORKER_VIEW_Y			= 50
 ADMIN_MOD_WORKER_X						= 8
-ADMIN_MOD_WORKER_Y						= 2
+ADMIN_MOD_WORKER_Y						= 5
 GRID_X_POSITION_ACTIVE					= 6
 GRID_X_POSITION_CREATE_MOD_WORK			= 7
 GRID_Y_POSITION_CREATE_MOD_WORK			= 1
@@ -174,3 +194,9 @@ GRID_Y_POSITION_MIN_TIME				= 2
 MORE_YEARS								= 15
 COLUMNS_IN_FILE							= 3
 ERROR_FILE								= -1
+
+INTRO_HOUR_DEFAULT						= 8
+INTRO_MIN_DEFAULT						= 0
+EXIT_HOUR_DEFAULT						= 17
+EXIT_MIN_DEFAULT						= 0
+DEFAULT_LUNCHTIME						= 60
