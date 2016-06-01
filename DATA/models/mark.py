@@ -19,3 +19,12 @@ class Marcacion():
 								)"""%(self.pin,self.hora,self.valido)
 		cursor_db.execute(insert_mark)
 		return True
+
+	def update(self,cursor_db):
+		update_code_worker="""UPDATE Marcacion SET hour='%s', valido=b'%d'
+							WHERE id='%d'"""%(
+									self.hora,
+									self.valido,
+									self.id)
+		cursor_db.execute(update_code_worker)
+		return True

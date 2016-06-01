@@ -7,7 +7,7 @@ import sys
 #Import de Modulos
 BASE_DIR='../'
 sys.path.insert(0,BASE_DIR)
-from models import *
+from models import trabajador,mark,lunchtime
 
 def pin_exist(str_pin,db,active=False):
 	cursor=db.cursor()

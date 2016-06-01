@@ -9,7 +9,7 @@ from PyQt4 import QtCore,QtGui
 #Import de Modulos
 BASE_DIR='../'
 sys.path.insert(0,BASE_DIR)
-from models import *
+from models import trabajador,mark,lunchtime
 from constants import *
 
 def get_lunchtime_minutes(idlt,db):
@@ -31,3 +31,14 @@ def get_lunchtime(idlt,db):
 	for lunch in cursor:
 		return lunchtime.Lunchtime(lunch)
 	return None
+
+def get_lunchtimes(pin,db):
+	if(db==None):
+		return []
+	cursor=db.cursor()
+	select_lunchtime="select * from Lunchtime where pin='%s' ORDER BY fechavalido DESC"%(pin)
+	cursor.execute(select_lunchtime)
+	lunchtime_list = []
+	for lunch in cursor:
+		lunchtime_list.append(lunchtime.Lunchtime(lunch))
+	return lunchtime_list

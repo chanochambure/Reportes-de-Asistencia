@@ -35,7 +35,6 @@ class Lunchtime():
 		if(new_lunchtime==self.minutos):
 			return False
 		self.minutos = new_lunchtime
-		self.fechavalido = get_actual_date()
 		insert_lunchtime="""INSERT INTO Lunchtime
 								(pin,fechavalido,minutos)
 								values('%s','%s','%d'

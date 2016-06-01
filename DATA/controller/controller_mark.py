@@ -9,17 +9,19 @@ from PyQt4 import QtCore,QtGui
 #Import de Modulos
 BASE_DIR='../'
 sys.path.insert(0,BASE_DIR)
-from models import *
+from models import mark,trabajador,lunchtime
 from constants import *
 from controller import controller_trabajador
 
-def has_a_check(pin,str_datetime,db,valid=True):
+def has_a_check(pin,str_datetime,db,valid=True,id=-1):
 	cursor=db.cursor()
 	select_marks="select * from Marcacion where pin='%s' and hour='%s'"%(pin,str_datetime)
 	if(valid):
 		select_marks+=" and valido=1"
 	cursor.execute(select_marks)
 	rows = cursor.fetchall()
+	if(id!=-1 and len(rows)>0):
+		return rows[0][0]!=id
 	return len(rows)>0
 
 def valid_date(str_datetime,tipo=True):
@@ -28,6 +30,19 @@ def valid_date(str_datetime,tipo=True):
 	if(past):
 		return past>actual
 	return True
+
+def get_marks(pin,str_datetime1,str_datetime2,db,validos=False):
+	cursor=db.cursor()
+	list_marks=[]
+	select_marks="""SELECT * FROM Marcacion WHERE pin='%s' and 
+					DATE(Marcacion.hour)>='%s' and DATE(Marcacion.hour)<='%s'"""%(pin,str_datetime1,str_datetime2)
+	if(validos):
+		select_marks+=" and valido=1"
+	select_marks+=" ORDER BY hour"
+	cursor.execute(select_marks)
+	for row in cursor:
+		list_marks.append(mark.Marcacion(row))
+	return list_marks
 
 def insert_from_filepath(filepath):
 	if(filepath.length()==0):

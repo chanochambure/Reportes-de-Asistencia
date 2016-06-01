@@ -10,7 +10,7 @@ from PyQt4.QtGui import *
 BASE_DIR='../'
 sys.path.insert(0,BASE_DIR)
 from constants import *
-from views.admin import insert_worker_view,insert_marks_view,modify_worker_view
+from views.admin import insert_worker_view,insert_marks_view,modify_worker_view,control_marks_view
 from views import search_worker_view
 from controller import controller_mark
 
@@ -35,6 +35,7 @@ class main_view_admin(QWidget):
 		button_modify_worker = QPushButton(BUTTON_MODIFY_WORKER,self)
 		button_insert_marks = QPushButton(BUTTON_MARKS,self)
 		button_insert_marks_from_file = QPushButton(BUTTON_MARKS_FROM_FILE,self)
+		button_control_marks = QPushButton(BUTTON_CONTROL_MARKS,self)
 		button_exit = QPushButton(BUTTON_EXIT,self)
 
 		#Modificacion widgets
@@ -45,6 +46,7 @@ class main_view_admin(QWidget):
 		button_modify_worker.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_modify_worker.height())
 		button_insert_marks.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_insert_marks.height())
 		button_insert_marks_from_file.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_insert_marks_from_file.height())
+		button_control_marks.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_exit.height())
 		button_exit.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_exit.height())
 
 		#FUNCTION
@@ -52,6 +54,7 @@ class main_view_admin(QWidget):
 		self.connect(button_modify_worker, SIGNAL("clicked()"),self.modify_worker)
 		self.connect(button_insert_marks, SIGNAL("clicked()"),self.insert_marks)
 		self.connect(button_insert_marks_from_file, SIGNAL("clicked()"),self.insert_marks_from_file)
+		self.connect(button_control_marks, SIGNAL("clicked()"),self.control_marks)
 		self.connect(button_exit, SIGNAL("clicked()"),self.close)
 
 		#GRID SIZE
@@ -64,6 +67,7 @@ class main_view_admin(QWidget):
 		grid.addWidget(button_modify_worker,GRID_X_POSITION_MODIFY_WORKER,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_insert_marks,GRID_X_POSITION_INSERT_MARKS,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_insert_marks_from_file,GRID_X_POSITION_INSERT_MARKS_FROM_FILE,GRID_Y_POSITION_BUTTON)
+		grid.addWidget(button_control_marks,GRID_X_POSITION_CONTROL_MARKS,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_exit,GRID_X_POSITION_EXIT,GRID_Y_POSITION_BUTTON)
 
 		#LAYAOUT
@@ -120,6 +124,20 @@ class main_view_admin(QWidget):
 					QMessageBox.question(self, 'Message',DATA_INSERTED_FROM_FILE+str(data), QMessageBox.Ok)
 				elif(data==ERROR_FILE):
 					QMessageBox.warning(self, 'Error',ERROR_WITH_THE_FILE, QMessageBox.Ok)
+			self.singleton_widget=False
+
+	def control_marks(self):
+		if(self.singleton_widget):
+			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
+		else:
+			self.singleton_widget=True
+			self.ventana = search_worker_view.search_worker_view(SEARCH_WORKER_CONTROL_MESSAGE,False)
+			self.ventana.exec_()
+			if(self.ventana.selected):
+				worker = self.ventana.selected
+				self.ventana = control_marks_view.control_marks_view(worker)
+				self.ventana.exec_()
+			self.ventana=None
 			self.singleton_widget=False
 
 	def closeEvent(self, evnt):
