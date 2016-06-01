@@ -29,6 +29,9 @@ def valid_date(str_datetime,tipo=True):
 	past=to_datetime(str_datetime,tipo)
 	if(past):
 		return past>actual
+	past=to_datetime_other(str_datetime)
+	if(past):
+		return past>actual
 	return True
 
 def get_marks(pin,str_datetime1,str_datetime2,db,validos=False):
@@ -61,12 +64,15 @@ def insert_from_filepath(filepath):
 				str_pin=str_pin[0:len(str_pin)-1]
 				str_datetime=listline[1]
 				if(controller_trabajador.pin_exist(str_pin,db,True) and valid_date(str_datetime,False)==False):
-					datetime_data=to_datetime(str_datetime,False)
-					str_datetime=str(datetime_data)
-					if(has_a_check(str_pin,str_datetime,db)==False):
-						new_mark = mark.Marcacion([0,str_pin,str_datetime,True])
-						if(new_mark.insert(db.cursor())):
-							cont+=1
+					datetime_data=to_datetime_other(str_datetime)
+					if(datetime_data==None):
+						datetime_data=to_datetime(str_datetime,False)
+					if(datetime_data):
+						str_datetime=str(datetime_data)
+						if(has_a_check(str_pin,str_datetime,db)==False):
+							new_mark = mark.Marcacion([0,str_pin,str_datetime,True])
+							if(new_mark.insert(db.cursor())):
+								cont+=1
 			db.commit()
 			db.close()
 			return cont

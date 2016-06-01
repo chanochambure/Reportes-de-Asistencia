@@ -22,6 +22,16 @@ def get_lunchtime_minutes(idlt,db):
 		return lunch[3]
 	return DEFAULT_LUNCHTIME
 
+def get_lunchtime_date(idlt,db):
+	if(db==None):
+		return datetime.datetime.now().date()
+	cursor=db.cursor()
+	select_lunchtime="select * from Lunchtime where id='%d'"%(idlt)
+	cursor.execute(select_lunchtime)
+	for lunch in cursor:
+		return to_date(str(lunch[2]),True)
+	return datetime.datetime.now().date()
+
 def get_lunchtime(idlt,db):
 	if(db==None):
 		return None

@@ -38,6 +38,13 @@ def to_datetime(str_datetime,tipo):
 	except ValueError:
 		return None
 
+def to_datetime_other(str_datetime):
+	try:
+		return_value=datetime.datetime.strptime(str(str_datetime),"%d/%m/%Y %I:%M:%S %p")
+		return return_value
+	except ValueError:
+		return None
+
 def to_date(str_date,tipo):
 	try:
 		if(tipo):
@@ -140,6 +147,7 @@ MOD_MARK_SUCCESS					= "Modificacion Hecha"
 WORKER_WITH_MARK_OR_NO_MODIFICATION	= "El usuario tiene una marcacion en este dia con dicha hora o no hubo modificaciones"
 ADMIN_CONTROL_MARKS_VALIDO			= "Mostrar No Validos"
 CREATE_LUNCHTIME_INVALID_DATE		= "No puede crear un tiempo de refrigerio para un fecha que es anterior al ultimo refrigerio"
+CREATE_LUNCHTIME_LAST_MOD			= "\n Fecha Ultimo Refrigerio: "
 
 #NUMBERS ADMIN
 GRID_X_MAIN_WINDOW_ADMIN				= 3
@@ -272,8 +280,14 @@ GRID_Y_POSITION_BACK_MODIFY_MARK		= 0
 #TEXT REPORTES
 MAIN_VIEW_TITLE_REPORTES					= "Rerpotes de Asistencias"
 BUTTON_REPORTES_LUCHTIME					= "Tiempos de Refrigerio"
+BUTTON_REPORTES_TARDANZAS					= "Tardanzas"
+BUTTON_REPORTES_HORAS						= "Horas Trabajadas"
 REPORTES_LUNCHTIME_TITLE					= "Tiempos de Refrigerio"
+REPORTES_TARDANZA_TITLE						= "Tardanzas"
+REPORTES_HORAS_TITLE						= "Horas Trabajadas"
 SEARCH_SEE_REPORTES_LUNCHTIME_MESSAGE		= "Ver Refrigerios"
+SEARCH_SEE_REPORTES_TARDANZA_MESSAGE		= "Ver Tardanzas"
+SEARCH_SEE_REPORTES_HORAS_MESSAGE			= "Horas Trabajadas"
 LISTA_TABLE_LUNCHTIME						= ["Fecha","Minutos"]
 
 #NUMBERS REPORTES
@@ -282,6 +296,8 @@ GRID_Y_MAIN_WINDOW_REPORTES					= 3
 GRID_X_POSITION_TITLE_R						= 0
 GRID_X_POSITION_EXIT_R						= 5
 GRID_X_POSITION_REPORTE_LUNCHTIME_R			= 4
+GRID_X_POSITION_REPORTE_TARDANZA_R			= 3
+GRID_X_POSITION_REPORTE_HORAS_R				= 2
 GRID_Y_POSITION_BUTTON_R					= 1
 
 BUTTON_SIZE_REPORTE_LUNCHTIME_VIEW_X		= 150

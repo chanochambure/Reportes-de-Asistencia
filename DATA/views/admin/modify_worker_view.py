@@ -158,30 +158,45 @@ class modify_worker_view(QDialog):
 			reply=QMessageBox.question(self, 'Message',MOD_WORKER_QUESTION,QMessageBox.Yes,QMessageBox.No)
 			if reply == QMessageBox.Yes:
 				if(db):
+					lname = self.worker.name
+					lfname = self.worker.father_last_name
+					lmname = self.worker.mother_last_name
+					lactivo = self.worker.activo
 					self.worker.name = name
 					self.worker.father_last_name = fname
 					self.worker.mother_last_name = mname
 					self.worker.activo = activo
-					inserted=False
+					inserted=True
 					if(self.worker.update(db.cursor())):
 						lunchtime_t=controller_lunchtime.get_lunchtime(self.worker.idlt,db)
 						if(lunchtime_t):
-							if(to_date(lunchtime_t.fechavalido,True)>=datetime.date(int(year),int(month),int(day))):
+							if(to_date(lunchtime_t.fechavalido,True)>datetime.date(int(year),int(month),int(day))):
+								QMessageBox.warning(self, 'Error',CREATE_LUNCHTIME_INVALID_DATE+CREATE_LUNCHTIME_LAST_MOD+lunchtime_t.fechavalido, QMessageBox.Ok)
+								inserted=False
+							elif(lunchtime_t.minutos!=int(lt_minutes) and to_date(lunchtime_t.fechavalido,True)==datetime.date(int(year),int(month),int(day))):
 								QMessageBox.warning(self, 'Error',CREATE_LUNCHTIME_INVALID_DATE, QMessageBox.Ok)
-							else:
+								inserted=False
+							elif(to_date(lunchtime_t.fechavalido,True)!=datetime.date(int(year),int(month),int(day))):
 								lunchtime_t.fechavalido=date_to_str(year,month,day)
 								if(lunchtime_t.insert_new_lunchtime(lt_minutes,db.cursor())):
 									self.worker.update_new_lunchtime(lunchtime_t.id,db.cursor())
-									inserted=True
 						if(inserted):
 							db.commit()
 							QMessageBox.question(self, 'Message',MOD_WORKER_SUCCESS,QMessageBox.Ok)
 							self.close()
+						else:
+							self.worker.name = lname
+							self.worker.father_last_name = lfname
+							self.worker.mother_last_name = lmname
+							self.worker.activo = lactivo
 		if(db):
 			db.close()
 
 	def create_combo_box(self):
-		actual_date=datetime.datetime.now()
+		db=get_connection()
+		actual_date=controller_lunchtime.get_lunchtime_date(self.worker.idlt,db)
+		if(db):
+			db.close()
 		year_list=range(actual_date.year - MORE_YEARS,actual_date.year + 1)
 		year_list.reverse()
 		for year in year_list:

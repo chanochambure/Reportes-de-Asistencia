@@ -24,6 +24,9 @@ class control_marks_view(QDialog):
 		#crear la ventana
 		self.control_marks_create()
 		#Dando tamaño a la pantalla
+		screenGeometry = QApplication.desktop().availableGeometry()
+		self.resize(screenGeometry.width(), screenGeometry.height())
+		self.showMaximized()
 		self.setWindowTitle(ADMIN_CONTROL_MARKS_TITLE)
 		self.show()
 
@@ -40,7 +43,6 @@ class control_marks_view(QDialog):
 		button_search = QPushButton(BUTTON_SEARCH_MARK,self)
 		button_back = QPushButton(BUTTON_BACK,self)
 		label_pin = QLabel(ADMIN_NAME_INSERT_MARK)
-		self.text_pin = QLineEdit()
 		self.text_name = QLineEdit()
 		self.marks_table = QTableWidget()
 		self.d_box1 = QComboBox()
@@ -52,9 +54,7 @@ class control_marks_view(QDialog):
 
 		#Modificacion widgets
 		self.text_valido.setChecked(True)
-		self.text_pin.setText(self.worker.pin)
-		self.text_pin.setDisabled(True)
-		self.text_name.setText(self.worker.name+" "+self.worker.father_last_name+" "+self.worker.mother_last_name)
+		self.text_name.setText(self.worker.pin+" - "+self.worker.name+" "+self.worker.father_last_name+" "+self.worker.mother_last_name)
 		self.text_name.setDisabled(True)
 		font_title = QFont()
 		font_title.setPointSize(FONT_TITLE_SIZE)
@@ -103,8 +103,7 @@ class control_marks_view(QDialog):
 		grid.addWidget(self.y_box2,GRID_X_POSITION_DATEMARK+1,GRID_Y_POSITION_YEAR_DATEMARK)
 
 		grid.addWidget(label_pin,GRID_X_POSITION_PIN,GRID_Y_POSITION_LABEL)
-		grid.addWidget(self.text_pin,GRID_X_POSITION_PIN,GRID_Y_POSITION_TEXT)
-		grid.addWidget(self.text_name,GRID_X_POSITION_PIN-1,GRID_Y_POSITION_TEXT_MARKS_NAME,GRID_X_POSITION_PIN,GRID_Y_POSITION_TEXT_MARKS_NAME+2)
+		grid.addWidget(self.text_name,GRID_X_POSITION_PIN,GRID_Y_POSITION_TEXT,1,GRID_Y_POSITION_TEXT+3)
 
 		#LAYAOUT
 		self.setLayout(grid)
