@@ -18,6 +18,24 @@ def get_connection(showError=True):
 		return None
 
 #TIME
+def mins_to_str_time(mins,minutos_de_trabajo):
+	if(mins!=None and minutos_de_trabajo>0):
+		horas=int(mins/60)
+		real_mins=str(mins-horas*60)
+		if(int(real_mins)<10):
+			real_mins='0'+real_mins
+		dias=int(mins/minutos_de_trabajo)
+		diasd=int(horas/24)
+		if(diasd>0):
+			horas_t=int(minutos_de_trabajo/60)
+			real_mins_t=str(minutos_de_trabajo-horas_t*60)
+			if(int(real_mins_t)<10):
+				real_mins_t='0'+real_mins_t
+			str_tr=str(horas_t)+":"+real_mins_t+" h"
+			return "Dias: "+str(dias)+" - Tiempo por Dia: "+str_tr+" - Tiempo Total: "+str(horas)+":"+real_mins+" h"
+		return str(horas)+":"+real_mins+" h"
+	return "Error - No tiene las Marcaciones obligatorias de la fecha"
+
 def datetime_to_str(day,month,year,hour,minute):
 	return year+"-"+month+"-"+day+" "+hour+":"+minute+":00"
 
@@ -148,6 +166,7 @@ WORKER_WITH_MARK_OR_NO_MODIFICATION	= "El usuario tiene una marcacion en este di
 ADMIN_CONTROL_MARKS_VALIDO			= "Mostrar No Validos"
 CREATE_LUNCHTIME_INVALID_DATE		= "No puede crear un tiempo de refrigerio para un fecha que es anterior al ultimo refrigerio"
 CREATE_LUNCHTIME_LAST_MOD			= "\n Fecha Ultimo Refrigerio: "
+BUTTON_INSERT_NEW_MARK				= "Crear Nueva Marcacion"
 
 #NUMBERS ADMIN
 GRID_X_MAIN_WINDOW_ADMIN				= 3
@@ -289,6 +308,20 @@ SEARCH_SEE_REPORTES_LUNCHTIME_MESSAGE		= "Ver Refrigerios"
 SEARCH_SEE_REPORTES_TARDANZA_MESSAGE		= "Ver Tardanzas"
 SEARCH_SEE_REPORTES_HORAS_MESSAGE			= "Horas Trabajadas"
 LISTA_TABLE_LUNCHTIME						= ["Fecha","Minutos"]
+REPORTE_LABEL_NAME							= "Trabajador"
+BUTTON_REPORTE								= "Generar Reporte"
+REPORTE_TOTAL_HORAS_EMPTY					= "--"
+REPORTE_LABEL_TOTAL_HORAS					= "Total Horas:Minutos"
+BUTTON_EXCEL								= "Exportar a Excel"
+BUTTON_CONTROL_MARK							= "Abrir Control de Marcaciones"
+REPORTE_HORAS_TITLE_ROWS					= ["Fecha","Horas:Minutos Trabajados"]
+REPORTE_TARDANZA_TITLE_ROWS					= ["Fecha","Total Marcaciones","Tardanza Entrada","Tardanza Salida","Tardanza en Refrigerio","TOTAL"]
+REPORTE_LABEL_TOTAL_MINUTOS_TARDE			= "Total Minutos Tarde"
+CONTROL_MARK_OPENED							= "El Control de Marcaciones se encuentra Abierto"
+NONE_TO_SAVE								= "Nada que Guardar"
+SAVE_FILE_TITLE								= "Guardar Rerporte"
+CREATE_EXCEL_SUCCESS						= "Reporte Guardado"
+EXCEL_PROBLEM								= "No tiene permisos para editar el archivo, cierre todos los programas que esten usando el archivo"
 
 #NUMBERS REPORTES
 GRID_X_MAIN_WINDOW_REPORTES					= 6
@@ -313,3 +346,45 @@ GRID_Y_POSITION_REPORTE_LUNCHTIME_TABLE_1	= 0
 GRID_Y_POSITION_REPORTE_LUNCHTIME_TABLE_2	= 4
 GRID_X_POSITION_BACK_REPORTE_LUNCHTIME		= 7
 GRID_Y_POSITION_BACK_REPORTE_LUNCHTIME		= 0
+
+REPORTE_HORAS_X_GRID						= 11
+REPORTE_HORAS_Y_GRID						= 5
+GRID_X_POSITION_TITLE_REP_HORAS				= 0
+GRID_Y_POSITION_TITLE_REP_HORAS				= 0
+GRID_X_POSITION_NAME_REP_HORAS				= 1
+GRID_Y_POSITION_NAME_REP_HORAS				= 0
+GRID_Y_POSITION_TEXT_N_REP_HORAS			= 1
+GRID_X_POSITION_TOTAL_LABEL_REP_HORAS		= 2
+GRID_Y_POSITION_TOTAL_LABEL_REP_HORAS		= 4
+GRID_X_POSITION_TOTAL_REP_HORAS				= 3
+GRID_Y_POSITION_TOTAL_REP_HORAS				= 4
+GRID_X_POSITION_REPO_REP_HORAS				= 1
+GRID_Y_POSITION_REPO_REP_HORAS				= 4
+GRID_X_POSITION_EXCEL_REP_HORAS				= 10
+GRID_Y_POSITION_EXCEL_REP_HORAS				= 2
+GRID_X_POSITION_CMARK_REP_HORAS				= 10
+GRID_Y_POSITION_CMARK_REP_HORAS				= 4
+GRID_X_POSITION_BACK_REP_HORAS				= 10
+GRID_Y_POSITION_BACK_REP_HORAS				= 0
+GRID_X_POSITION_DATEMARK_REP_HORAS			= 2
+GRID_Y_POSITION_LABEL_DATE					= 0
+GRID_Y_POSITION_DAY_DATEMARK_REP_HORAS		= 1
+GRID_Y_POSITION_MONTH_DATEMARK_REP_HORAS	= 2
+GRID_Y_POSITION_YEAR_DATEMARK_REP_HORAS		= 3
+REPORTES_HORAS_BUTTON_SIZE_X				= 350
+REPORTES_HORAS_BUTTON_SIZE_Y				= 100
+
+SIZE_COLUMNS_TABLE_REPORTE_HORAS			= 2
+GRID_X_POSITION_REPORTE_HORAS_TABLE_1		= 4
+GRID_X_POSITION_REPORTE_HORAS_TABLE_2		= 6
+GRID_Y_POSITION_REPORTE_HORAS_TABLE_1		= 0
+GRID_Y_POSITION_REPORTE_HORAS_TABLE_2		= 5
+SIZE_COLUMNS_TABLE_REPORTE_TARDANZA			= 6
+
+
+
+
+
+#Importantes
+TOTAL_MARKS_LIMIT_FOR_DAY					= 4
+TOTAL_MARKS_SATURDAY						= 2

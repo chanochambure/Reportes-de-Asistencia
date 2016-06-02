@@ -8,6 +8,13 @@ import sys
 BASE_DIR='../'
 sys.path.insert(0,BASE_DIR)
 from models import trabajador,mark,lunchtime
+from constants import *
+
+def get_time_work(str_time1,str_time2,lunchtime_minutes):
+	strt1=to_datetime("2001-1-1 "+str_time1,True)
+	strt2=to_datetime("2001-1-1 "+str_time2,True)
+	work_time=int((strt2-strt1).seconds/60)
+	return (work_time)-(lunchtime_minutes)
 
 def pin_exist(str_pin,db,active=False):
 	cursor=db.cursor()

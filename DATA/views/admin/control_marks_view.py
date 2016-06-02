@@ -13,6 +13,7 @@ sys.path.insert(0,BASE_DIR)
 from constants import *
 from models import mark
 from views import modify_mark_view
+from views.admin import insert_marks_view
 from controller import controller_mark
 
 class control_marks_view(QDialog):
@@ -41,6 +42,7 @@ class control_marks_view(QDialog):
 		label_valido = QLabel(ADMIN_CONTROL_MARKS_VALIDO)
 		self.text_valido = QRadioButton()
 		button_search = QPushButton(BUTTON_SEARCH_MARK,self)
+		button_insert = QPushButton(BUTTON_INSERT_NEW_MARK,self)
 		button_back = QPushButton(BUTTON_BACK,self)
 		label_pin = QLabel(ADMIN_NAME_INSERT_MARK)
 		self.text_name = QLineEdit()
@@ -60,6 +62,7 @@ class control_marks_view(QDialog):
 		font_title.setPointSize(FONT_TITLE_SIZE)
 		label_title.setFont(font_title)
 		button_search.setFixedSize(BUTTON_SIZE_SEARCH_MARKS_VIEW_X,BUTTON_SIZE_SEARCH_MARKS_VIEW_Y)
+		button_insert.setFixedSize(BUTTON_SIZE_SEARCH_MARKS_VIEW_X,BUTTON_SIZE_SEARCH_MARKS_VIEW_Y)
 		button_back.setFixedSize(BUTTON_SIZE_SEARCH_MARKS_VIEW_X,BUTTON_SIZE_SEARCH_MARKS_VIEW_Y)
 		self.marks_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
 		self.rows = 0
@@ -75,6 +78,7 @@ class control_marks_view(QDialog):
 		#FUNCTION
 		self.connect(button_back, SIGNAL("clicked()"),self.close)
 		self.connect(button_search, SIGNAL("clicked()"),self.search_marks_function)
+		self.connect(button_insert, SIGNAL("clicked()"),self.new_marks_function)
 		self.connect(self.y_box1, SIGNAL("currentIndexChanged(QString)"), self.day_combo_box1)
 		self.connect(self.m_box1, SIGNAL("currentIndexChanged(QString)"), self.day_combo_box1)
 		self.connect(self.y_box2, SIGNAL("currentIndexChanged(QString)"), self.day_combo_box2)
@@ -91,6 +95,7 @@ class control_marks_view(QDialog):
 		grid.addWidget(label_date1,GRID_X_POSITION_DATEMARK,GRID_Y_POSITION_SEARCH_MARK_DATE)
 		grid.addWidget(label_date2,GRID_X_POSITION_DATEMARK+1,GRID_Y_POSITION_SEARCH_MARK_DATE)
 		grid.addWidget(button_search,GRID_X_POSITION_CREATE_SEARCH_MARK,GRID_Y_POSITION_CREATE_SEARCH_MARK)
+		grid.addWidget(button_insert,GRID_X_POSITION_CREATE_SEARCH_MARK+1,GRID_Y_POSITION_CREATE_SEARCH_MARK)
 		grid.addWidget(button_back,GRID_X_POSITION_BACK_SEARCH_MARK,GRID_Y_POSITION_BACK_SEARCH_MARK)
 		grid.addWidget(self.marks_table,GRID_X_POSITION_SEARCH_MARK_TABLE_1,GRID_Y_POSITION_SEARCH_MARK_TABLE_1,
 						GRID_X_POSITION_SEARCH_MARK_TABLE_2,GRID_Y_POSITION_SEARCH_MARK_TABLE_1)
@@ -248,3 +253,13 @@ class control_marks_view(QDialog):
 	def closeEvent(self, evnt):
 		if(self.ventana):
 			self.ventana.close()
+
+	def new_marks_function(self):
+		if(self.modify_mark_singleton):
+			QMessageBox.warning(self, 'Error',MODIFY_MARK_OPENED, QMessageBox.Ok)
+		else:
+			self.modify_mark_singleton=True
+			self.ventana = insert_marks_view.insert_marks_view(self.worker)
+			self.ventana.exec_()
+			self.ventana=None
+			self.modify_mark_singleton=False
