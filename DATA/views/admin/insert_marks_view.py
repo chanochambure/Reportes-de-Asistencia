@@ -15,9 +15,13 @@ from models import mark
 from controller import controller_mark
 
 class insert_marks_view(QDialog):
-	def __init__(self,worker_to_set,parent=None):
+	def __init__(self,worker_to_set,date_d=None,parent=None):
 		super(insert_marks_view, self).__init__(parent)
 		self.worker=worker_to_set
+		self.date_ac=datetime.datetime.now()
+		if(date_d!=None):
+			sd=date_d.split("-")
+			self.date_ac=to_datetime(datetime_to_str(sd[2],sd[1],sd[0],str(self.date_ac.hour),str(self.date_ac.minute)),True)
 		#crear la ventana
 		self.insert_marks_create()
 		#Dando tamaño a la pantalla
@@ -106,7 +110,7 @@ class insert_marks_view(QDialog):
 					self.close()
 
 	def create_combo_box(self):
-		actual_date=datetime.datetime.now()
+		actual_date=self.date_ac
 		for hour in range(0,24):
 			str_hour=str(hour)
 			if(hour<10):

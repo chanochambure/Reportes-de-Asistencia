@@ -16,10 +16,12 @@ from constants import *
 from models import mark,lunchtime,trabajador
 from controller import controller_lunchtime,controller_trabajador
 from views.admin import control_marks_view
+from views import control_single_mark_view
 from reporte import reporte_horas
 
 class horas_reporte_view(QDialog):
 	def __init__(self,worker_to_set,parent=None):
+		self.time_to_work=8*60
 		self.var_singleton=False
 		self.reporte_matrix=[]
 		self.ventana=None
@@ -253,18 +255,17 @@ class horas_reporte_view(QDialog):
 		ws1["A3"]=REPORTE_HORAS_TITLE_ROWS[0]
 		ws1["B3"]=REPORTE_HORAS_TITLE_ROWS[1]
 		last_pos_row=4
-		for currentColumn in range(self.reporte_table.columnCount()):
-			last_pos_row=4
-			for currentRow in range(self.reporte_table.rowCount()):
+		for currentRow in range(self.reporte_table.rowCount()):
+			for currentColumn in range(self.reporte_table.columnCount()-1):
 				try:
-					last_pos_row+=1
 					teext = str(self.reporte_table.item(currentRow,currentColumn).text())
 					celda = get_column_letter(currentColumn+1)+str(currentRow+4)
 					ws1[celda]=teext
 				except AttributeError:
 					pass
+			last_pos_row+=1
 		celda = "A"+str(last_pos_row)
-		ws1[celda] = "Total Trabajado:"
+		ws1[celda] = REPORTE_LABEL_TOTAL_HORAS
 		celda = "B"+str(last_pos_row)
 		ws1[celda] = self.text_total_horas.text()
 		try:
@@ -290,15 +291,20 @@ class horas_reporte_view(QDialog):
 			time_lunch=controller_lunchtime.get_lunchtime_minutes(self.worker.idlt,db)
 			if(db):
 				db.close()
-			time_to_work=controller_trabajador.get_time_work(self.worker.hora_entrada,self.worker.hora_salida,time_lunch)
-			self.text_total_horas.setText(mins_to_str_time(self.minutos,time_to_work))
+			self.time_to_work=controller_trabajador.get_time_work(self.worker.hora_entrada,self.worker.hora_salida,time_lunch)
+			self.text_total_horas.setText(mins_to_str_time(self.minutos,self.time_to_work))
+		else:
+			self.text_total_horas.setText(REPORTE_TOTAL_HORAS_EMPTY)
 		if(len(self.reporte_matrix)):
 			self.rows = len(self.reporte_matrix)
 			self.reporte_table.setRowCount(self.rows)
 			stringVert = []
 			for index_report in range(len(self.reporte_matrix)):
 				self.reporte_table.setItem(index_report,0, QTableWidgetItem(self.reporte_matrix[index_report][0]))
-				self.reporte_table.setItem(index_report,1, QTableWidgetItem(mins_to_str_time(self.reporte_matrix[index_report][1],time_to_work)))
+				self.reporte_table.setItem(index_report,1, QTableWidgetItem(mins_to_str_time(self.reporte_matrix[index_report][1],self.time_to_work)))
+				self.btn_sell = QPushButton(MODIFICAR_REPORTE_MARKS)
+				self.btn_sell.clicked.connect(self.selection)
+				self.reporte_table.setCellWidget(index_report,2,self.btn_sell)
 				stringVert.append(str(index_report+1))
 			self.reporte_table.setVerticalHeaderLabels(stringVert)
 
@@ -307,3 +313,16 @@ class horas_reporte_view(QDialog):
 		self.reporte_table.setRowCount(0);
 		self.reporte_table.setColumnCount(SIZE_COLUMNS_TABLE_REPORTE_HORAS)
 		self.reporte_table.setHorizontalHeaderLabels(REPORTE_HORAS_TITLE_ROWS)
+
+	def selection(self):
+		if(self.var_singleton):
+			QMessageBox.warning(self, 'Error',CONTROL_MARK_OPENED, QMessageBox.Ok)
+		else:
+			index = self.reporte_table.indexAt(qApp.focusWidget().pos())
+			if index.isValid():
+				date = str(self.reporte_table.item(index.row(),0).text())
+				self.var_singleton=True
+				self.ventana=control_single_mark_view.control_single_mark_view(self.worker,date)
+				self.ventana.exec_()
+				self.ventana=None
+				self.var_singleton=False

@@ -15,14 +15,18 @@ from views import search_worker_view
 
 class main_view_reportes(QWidget):
 	def __init__(self):
-		self.ventana=None
+		self.ventana_rh=None
+		self.ventana_rt=None
+		self.ventana_rl=None
 		super(main_view_reportes, self).__init__()
 		self.main_view_create()
 		screenGeometry = QApplication.desktop().availableGeometry()
 		self.resize(screenGeometry.width()/4,screenGeometry.height()/2)
 		self.setWindowTitle(MAIN_TITLE)
 		self.show()
-		self.singleton_widget=False
+		self.singleton_widget_rh=False
+		self.singleton_widget_rt=False
+		self.singleton_widget_rl=False
 
 	def main_view_create(self):
 		#GRID
@@ -65,47 +69,51 @@ class main_view_reportes(QWidget):
 		self.setLayout(grid)
 
 	def reporte_horas(self):
-		if(self.singleton_widget):
+		if(self.singleton_widget_rh):
 			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
 		else:
-			self.singleton_widget=True
-			self.ventana = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_HORAS_MESSAGE,False)
-			self.ventana.exec_()
-			if(self.ventana.selected):
-				worker = self.ventana.selected
-				self.ventana = horas_reporte_view.horas_reporte_view(worker)
-				self.ventana.exec_()
-			self.ventana=None
-			self.singleton_widget=False
+			self.singleton_widget_rh=True
+			self.ventana_rh = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_HORAS_MESSAGE,False)
+			self.ventana_rh.exec_()
+			if(self.ventana_rh.selected):
+				worker = self.ventana_rh.selected
+				self.ventana_rh = horas_reporte_view.horas_reporte_view(worker)
+				self.ventana_rh.exec_()
+			self.ventana_rh=None
+			self.singleton_widget_rh=False
 
 	def reporte_tardanzas(self):
-		if(self.singleton_widget):
+		if(self.singleton_widget_rt):
 			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
 		else:
-			self.singleton_widget=True
-			self.ventana = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_TARDANZA_MESSAGE,False)
-			self.ventana.exec_()
-			if(self.ventana.selected):
-				worker = self.ventana.selected
-				self.ventana = tardanza_reporte_view.tardanza_reporte_view(worker)
-				self.ventana.exec_()
-			self.ventana=None
-			self.singleton_widget=False
+			self.singleton_widget_rt=True
+			self.ventana_rt = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_TARDANZA_MESSAGE,False)
+			self.ventana_rt.exec_()
+			if(self.ventana_rt.selected):
+				worker = self.ventana_rt.selected
+				self.ventana_rt = tardanza_reporte_view.tardanza_reporte_view(worker)
+				self.ventana_rt.exec_()
+			self.ventana_rt=None
+			self.singleton_widget_rt=False
 
 	def reporte_lunchtime(self):
-		if(self.singleton_widget):
+		if(self.singleton_widget_rl):
 			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
 		else:
-			self.singleton_widget=True
-			self.ventana = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_LUNCHTIME_MESSAGE,False)
-			self.ventana.exec_()
-			if(self.ventana.selected):
-				worker = self.ventana.selected
-				self.ventana = lunchtime_reporte_view.lunchtime_reporte_view(worker)
-				self.ventana.exec_()
-			self.ventana=None
-			self.singleton_widget=False
+			self.singleton_widget_rl=True
+			self.ventana_rl = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_LUNCHTIME_MESSAGE,False)
+			self.ventana_rl.exec_()
+			if(self.ventana_rl.selected):
+				worker = self.ventana_rl.selected
+				self.ventana_rl = lunchtime_reporte_view.lunchtime_reporte_view(worker)
+				self.ventana_rl.exec_()
+			self.ventana_rl=None
+			self.singleton_widget_rl=False
 
 	def closeEvent(self, evnt):
-		if(self.ventana):
-			self.ventana.close()
+		if(self.ventana_rh):
+			self.ventana_rh.close()
+		if(self.ventana_rt):
+			self.ventana_rt.close()
+		if(self.ventana_rl):
+			self.ventana_rl.close()

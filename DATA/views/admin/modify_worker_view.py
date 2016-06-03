@@ -162,10 +162,14 @@ class modify_worker_view(QDialog):
 					lfname = self.worker.father_last_name
 					lmname = self.worker.mother_last_name
 					lactivo = self.worker.activo
+					ltimeen = self.worker.hora_entrada
+					ltimesa = self.worker.hora_salida
 					self.worker.name = name
 					self.worker.father_last_name = fname
 					self.worker.mother_last_name = mname
 					self.worker.activo = activo
+					self.worker.hora_entrada = intro_t
+					self.worker.hora_salida = exit_t
 					inserted=True
 					if(self.worker.update(db.cursor())):
 						lunchtime_t=controller_lunchtime.get_lunchtime(self.worker.idlt,db)
@@ -189,6 +193,8 @@ class modify_worker_view(QDialog):
 							self.worker.father_last_name = lfname
 							self.worker.mother_last_name = lmname
 							self.worker.activo = lactivo
+							self.worker.hora_entrada = ltimeen
+							self.worker.hora_salida = ltimesa
 		if(db):
 			db.close()
 
@@ -197,10 +203,12 @@ class modify_worker_view(QDialog):
 		actual_date=controller_lunchtime.get_lunchtime_date(self.worker.idlt,db)
 		if(db):
 			db.close()
-		year_list=range(actual_date.year - MORE_YEARS,actual_date.year + 1)
+		act_year=datetime.datetime.now().year
+		year_list=range(act_year - MORE_YEARS,act_year + 1)
 		year_list.reverse()
 		for year in year_list:
 			self.y_box.addItem(str(year))
+		self.y_box.setCurrentIndex(act_year-actual_date.year)
 		for month in range(1,13):
 			str_month=str(month)
 			if(month<10):

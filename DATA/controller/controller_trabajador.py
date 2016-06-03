@@ -25,6 +25,16 @@ def pin_exist(str_pin,db,active=False):
 	rows = cursor.fetchall()
 	return len(rows)>0
 
+def get_worker(str_pin,db,active=True):
+	cursor=db.cursor()
+	select_worker="select * from Trabajador where pin='%s'"%(str_pin)
+	if(active):
+		select_worker+=" and activo=1"
+	cursor.execute(select_worker)
+	for wor in cursor:
+		return trabajador.Trabajador(wor)
+	return None
+
 def get_workers(str_name,str_fname,str_mname,db,active):
 	cursor=db.cursor()
 	list_workers=[]

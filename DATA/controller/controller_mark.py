@@ -47,6 +47,20 @@ def get_marks(pin,str_datetime1,str_datetime2,db,validos=False):
 		list_marks.append(mark.Marcacion(row))
 	return list_marks
 
+def get_marks_day(pin,str_datetime1,db,validos=False):
+	cursor=db.cursor()
+	list_marks=[]
+	select_marks="""SELECT * FROM Marcacion WHERE pin='%s' and 
+					DATE(Marcacion.hour)='%s'"""%(pin,str_datetime1)
+	if(validos):
+		select_marks+=" and valido=1"
+	select_marks+=" ORDER BY hour"
+	cursor.execute(select_marks)
+	for row in cursor:
+		list_marks.append(mark.Marcacion(row))
+	return list_marks
+
+
 def insert_from_filepath(filepath):
 	if(filepath.length()==0):
 		return ERROR_FILE

@@ -6,18 +6,23 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import datetime
+from openpyxl import Workbook
+from openpyxl.cell import get_column_letter
 
 #Import de Modulos
 BASE_DIR='../../'
 sys.path.insert(0,BASE_DIR)
 from constants import *
 from models import mark,lunchtime,trabajador
-from controller import *
+from controller import controller_lunchtime,controller_trabajador
+from views.admin import control_marks_view
+from views import control_single_mark_view
 from reporte import reporte_tardanza
 
 class tardanza_reporte_view(QDialog):
 	def __init__(self,worker_to_set,parent=None):
-		self.modify_mark_singleton=False
+		self.time_to_work=8*60
+		self.var_singleton=False
 		self.ventana=None
 		self.reporte_matrix=[]
 		super(tardanza_reporte_view, self).__init__(parent)
@@ -233,7 +238,45 @@ class tardanza_reporte_view(QDialog):
 		elif(len(self.reporte_matrix)==0):
 			QMessageBox.warning(self, 'Error',NONE_TO_SAVE, QMessageBox.Ok)
 		else:
-			print "to excel"
+			self.var_singleton=True
+			self.to_excel()
+			self.ventana=None
+			self.var_singleton=False
+
+	def to_excel(self):
+		dest_filename = unicode(QFileDialog.getSaveFileName(self, SAVE_FILE_TITLE, '', ".xlsx(*.xlsx)"))
+		wb = Workbook()
+		ws1 = wb.active
+		ws1.title=REPORTES_TARDANZA_TITLE
+		ws1["B1"]=REPORTES_TARDANZA_TITLE
+		ws1["A2"]=REPORTE_LABEL_NAME
+		ws1["B2"]=self.worker.name+" "+self.worker.father_last_name+" "+self.worker.mother_last_name
+		ws1["C2"]=self.worker.pin
+		for currentColumn in range(self.reporte_table.columnCount()):
+			try:
+				celda = get_column_letter(currentColumn+1)+str(3)
+				ws1[celda] = REPORTE_TARDANZA_TITLE_ROWS[currentColumn]
+			except AttributeError:
+				pass
+		counter=4
+		for currentRow in range(self.reporte_table.rowCount()):
+			for currentColumn in range(self.reporte_table.columnCount()-1):
+				try:
+					teext = str(self.reporte_table.item(currentRow,currentColumn).text())
+					celda = get_column_letter(currentColumn+1)+str(currentRow+4)
+					ws1[celda] = teext
+				except AttributeError:
+					pass
+			counter+=1
+		celda = "A"+str(counter)
+		ws1[celda] = REPORTE_LABEL_TOTAL_MINUTOS_TARDE
+		celda = "B"+str(counter)
+		ws1[celda] = self.text_total_horas.text()
+		try:
+			wb.save(filename = dest_filename)
+			QMessageBox.question(self, 'Message',CREATE_EXCEL_SUCCESS,QMessageBox.Ok)
+		except IOError:
+			QMessageBox.warning(self, 'Error',EXCEL_PROBLEM, QMessageBox.Ok)
 
 	def open_control_marks(self):
 		if(self.var_singleton):
@@ -247,24 +290,42 @@ class tardanza_reporte_view(QDialog):
 
 	def insert_reporte_table(self):
 		self.clear_reporte_table()
-#		if(len(self.list_marks)):
-#			self.rows = len(self.list_marks)
-#			self.marks_table.setRowCount(self.rows)
-#			stringVert = []
-#			for index_mark in range(len(self.list_marks)):
-#				self.marks_table.setItem(index_mark,0, QTableWidgetItem(self.list_marks[index_mark].hora))
-#				if(self.list_marks[index_mark].valido):
-#					self.marks_table.setItem(index_mark,1, QTableWidgetItem(CONTROL_MARK_ACTIVO))
-#				else:
-#					self.marks_table.setItem(index_mark,1, QTableWidgetItem(CONTROL_MARK_INACTIVO))
-#				self.btn_sell = QPushButton(CONTROL_MARK_SEARCH_MESSAGE)
-#				self.btn_sell.clicked.connect(self.modification_mark)
-#				self.marks_table.setCellWidget(index_mark,2,self.btn_sell)
-#				stringVert.append(str(index_mark+1))
-#			self.marks_table.setVerticalHeaderLabels(stringVert)
+		if(self.minutos>-1):
+			self.text_total_horas.setText(mins_to_str_time_ot(self.minutos,True))
+		else:
+			self.text_total_horas.setText(REPORTE_TOTAL_HORAS_EMPTY)
+		if(len(self.reporte_matrix)):
+			self.rows = len(self.reporte_matrix)
+			self.reporte_table.setRowCount(self.rows)
+			stringVert = []
+			for index_report in range(len(self.reporte_matrix)):
+				self.reporte_table.setItem(index_report,0, QTableWidgetItem(self.reporte_matrix[index_report][0]))
+				self.reporte_table.setItem(index_report,1, QTableWidgetItem(str(self.reporte_matrix[index_report][1])))
+				self.reporte_table.setItem(index_report,2, QTableWidgetItem(mins_to_str_time_ot(self.reporte_matrix[index_report][2])))
+				self.reporte_table.setItem(index_report,3, QTableWidgetItem(mins_to_str_time_ot(self.reporte_matrix[index_report][3])))
+				self.reporte_table.setItem(index_report,4, QTableWidgetItem(mins_to_str_time_ot(self.reporte_matrix[index_report][4])))
+				self.reporte_table.setItem(index_report,5, QTableWidgetItem(mins_to_str_time_ot(self.reporte_matrix[index_report][5])))
+				self.btn_sell = QPushButton(MODIFICAR_REPORTE_MARKS)
+				self.btn_sell.clicked.connect(self.selection)
+				self.reporte_table.setCellWidget(index_report,6,self.btn_sell)
+				stringVert.append(str(index_report+1))
+			self.reporte_table.setVerticalHeaderLabels(stringVert)
 
 	def clear_reporte_table(self):
 		self.reporte_table.clear();
 		self.reporte_table.setRowCount(0);
 		self.reporte_table.setColumnCount(SIZE_COLUMNS_TABLE_REPORTE_TARDANZA)
 		self.reporte_table.setHorizontalHeaderLabels(REPORTE_TARDANZA_TITLE_ROWS)
+
+	def selection(self):
+		if(self.var_singleton):
+			QMessageBox.warning(self, 'Error',CONTROL_MARK_OPENED, QMessageBox.Ok)
+		else:
+			index = self.reporte_table.indexAt(qApp.focusWidget().pos())
+			if index.isValid():
+				date = str(self.reporte_table.item(index.row(),0).text())
+				self.var_singleton=True
+				self.ventana=control_single_mark_view.control_single_mark_view(self.worker,date)
+				self.ventana.exec_()
+				self.ventana=None
+				self.var_singleton=False

@@ -36,6 +36,23 @@ def mins_to_str_time(mins,minutos_de_trabajo):
 		return str(horas)+":"+real_mins+" h"
 	return "Error - No tiene las Marcaciones obligatorias de la fecha"
 
+def mins_to_str_time_ot(mins,w_dat=False):
+	if(mins!=None):
+		nmins=(mins<0)
+		mins=abs(mins)
+		horas=int(mins/60)
+		real_mins=str(mins-horas*60)
+		if(int(real_mins)<10):
+			real_mins='0'+real_mins
+		dias=int((mins/60)/24)
+		return_str=str(horas)+":"+real_mins+" h"
+		if(w_dat):
+			return_str="Dias: "+str(dias)+" - Tiempo Total: "+return_str
+		if(nmins):
+			return_str="Temprano: "+return_str
+		return return_str
+	return "None"
+
 def datetime_to_str(day,month,year,hour,minute):
 	return year+"-"+month+"-"+day+" "+hour+":"+minute+":00"
 
@@ -44,6 +61,12 @@ def date_to_str(year,month,day):
 
 def time_to_str(hour,minute):
 	return hour+":"+minute+":00"
+
+def time_get_hour(str_hour):
+	return str(str_hour.split(":")[0])
+
+def time_get_min(str_hour):
+	return int(str_hour.split(":")[1])
 
 def to_datetime(str_datetime,tipo):
 	try:
@@ -257,7 +280,7 @@ GRID_X_POSITION_TIME					= 4
 GRID_Y_POSITION_HOUR_TIME				= 1
 GRID_Y_POSITION_MIN_TIME				= 2
 
-MORE_YEARS								= 15
+MORE_YEARS								= 20
 COLUMNS_IN_FILE							= 3
 ERROR_FILE								= -1
 
@@ -311,17 +334,18 @@ LISTA_TABLE_LUNCHTIME						= ["Fecha","Minutos"]
 REPORTE_LABEL_NAME							= "Trabajador"
 BUTTON_REPORTE								= "Generar Reporte"
 REPORTE_TOTAL_HORAS_EMPTY					= "--"
-REPORTE_LABEL_TOTAL_HORAS					= "Total Horas:Minutos"
+REPORTE_LABEL_TOTAL_HORAS					= "Total Trabajado"
 BUTTON_EXCEL								= "Exportar a Excel"
 BUTTON_CONTROL_MARK							= "Abrir Control de Marcaciones"
-REPORTE_HORAS_TITLE_ROWS					= ["Fecha","Horas:Minutos Trabajados"]
-REPORTE_TARDANZA_TITLE_ROWS					= ["Fecha","Total Marcaciones","Tardanza Entrada","Tardanza Salida","Tardanza en Refrigerio","TOTAL"]
-REPORTE_LABEL_TOTAL_MINUTOS_TARDE			= "Total Minutos Tarde"
+REPORTE_HORAS_TITLE_ROWS					= ["Fecha","Horas:Minutos Trabajados","Ver"]
+REPORTE_TARDANZA_TITLE_ROWS					= ["Fecha","Total Marcaciones","Tardanza Entrada","Tardanza Salida","Tardanza en Refrigerio","TOTAL","Ver"]
+REPORTE_LABEL_TOTAL_MINUTOS_TARDE			= "Total Tarde"
 CONTROL_MARK_OPENED							= "El Control de Marcaciones se encuentra Abierto"
 NONE_TO_SAVE								= "Nada que Guardar"
 SAVE_FILE_TITLE								= "Guardar Rerporte"
 CREATE_EXCEL_SUCCESS						= "Reporte Guardado"
 EXCEL_PROBLEM								= "No tiene permisos para editar el archivo, cierre todos los programas que esten usando el archivo"
+MODIFICAR_REPORTE_MARKS						= "Ver"
 
 #NUMBERS REPORTES
 GRID_X_MAIN_WINDOW_REPORTES					= 6
@@ -374,12 +398,12 @@ GRID_Y_POSITION_YEAR_DATEMARK_REP_HORAS		= 3
 REPORTES_HORAS_BUTTON_SIZE_X				= 350
 REPORTES_HORAS_BUTTON_SIZE_Y				= 100
 
-SIZE_COLUMNS_TABLE_REPORTE_HORAS			= 2
+SIZE_COLUMNS_TABLE_REPORTE_HORAS			= 3
 GRID_X_POSITION_REPORTE_HORAS_TABLE_1		= 4
 GRID_X_POSITION_REPORTE_HORAS_TABLE_2		= 6
 GRID_Y_POSITION_REPORTE_HORAS_TABLE_1		= 0
 GRID_Y_POSITION_REPORTE_HORAS_TABLE_2		= 5
-SIZE_COLUMNS_TABLE_REPORTE_TARDANZA			= 6
+SIZE_COLUMNS_TABLE_REPORTE_TARDANZA			= 7
 
 
 
