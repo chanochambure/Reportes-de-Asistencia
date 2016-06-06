@@ -21,7 +21,7 @@ def complete_day_reporte(list_reporte,pin,strdate,only_activas,db,total_marks):
 	cursor.execute(select_marks)
 	result=cursor.fetchall()
 	worker=controller_trabajador.get_worker(pin,db)
-	lunchtime_v=controller_lunchtime.get_lunchtime_minutes(worker.idlt,db)
+	lunchtime_v=controller_lunchtime.get_lunchtime_minutes_by_date_pin(strdate,worker.pin,db)
 	if(len(result)==total_marks):
 		if(total_marks==TOTAL_MARKS_LIMIT_FOR_DAY):
 			datetime_e=to_datetime(datetime_to_str(str(result[0][0].day),str(result[0][0].month),str(result[0][0].year),

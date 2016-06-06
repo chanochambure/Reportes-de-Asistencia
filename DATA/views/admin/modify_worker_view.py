@@ -141,20 +141,21 @@ class modify_worker_view(QDialog):
 		fname = self.text_fname.text()
 		mname = self.text_mname.text()
 		activo = self.text_active.isChecked()
-		lt_minutes = int(self.text_lunchtime.text())
+		lt_minutes = self.text_lunchtime.text()
 		intro_t=time_to_str(str(int(self.text_intro_hour.currentText())),self.text_intro_min.currentText())
 		exit_t=time_to_str(str(int(self.text_exit_hour.currentText())),self.text_exit_min.currentText())
 		if(name == '' or fname=='' or mname=='' or lt_minutes==''):
 			QMessageBox.warning(self, 'Error',CREATE_WORKER_EMPTY_CAMP, QMessageBox.Ok)
-		elif(str_is_invalid(name) or str_is_invalid(fname) or str_is_invalid(mname)):
+		elif(str_is_invalid(name) or str_is_invalid(fname) or str_is_invalid(mname) or str_is_invalid(lt_minutes)):
 			QMessageBox.warning(self, 'Error',CREATE_WORKER_INVALID_CAMP, QMessageBox.Ok)
-		elif(name == self.worker.name and fname == self.worker.father_last_name and mname == self.worker.mother_last_name
-			and activo == self.worker.activo and intro_t==self.worker.hora_entrada and exit_t==self.worker.hora_salida
-			and lt_minutes==controller_lunchtime.get_lunchtime_minutes(self.worker.idlt,db)):
-			QMessageBox.warning(self, 'Error',MOD_WORKER_NO_CHANGES, QMessageBox.Ok)
 		elif(is_number(lt_minutes)==False):
 			QMessageBox.warning(self, 'Error',CREATE_WORKER_INVALID_LT_MINUTES, QMessageBox.Ok)
+		elif(name == self.worker.name and fname == self.worker.father_last_name and mname == self.worker.mother_last_name
+			and activo == self.worker.activo and intro_t==self.worker.hora_entrada and exit_t==self.worker.hora_salida
+			and int(lt_minutes)==controller_lunchtime.get_lunchtime_minutes(self.worker.idlt,db)):
+			QMessageBox.warning(self, 'Error',MOD_WORKER_NO_CHANGES, QMessageBox.Ok)
 		else:
+			lt_minutes=int(lt_minutes)
 			reply=QMessageBox.question(self, 'Message',MOD_WORKER_QUESTION,QMessageBox.Yes,QMessageBox.No)
 			if reply == QMessageBox.Yes:
 				if(db):
@@ -174,16 +175,14 @@ class modify_worker_view(QDialog):
 					if(self.worker.update(db.cursor())):
 						lunchtime_t=controller_lunchtime.get_lunchtime(self.worker.idlt,db)
 						if(lunchtime_t):
-							if(to_date(lunchtime_t.fechavalido,True)>datetime.date(int(year),int(month),int(day))):
-								QMessageBox.warning(self, 'Error',CREATE_LUNCHTIME_INVALID_DATE+CREATE_LUNCHTIME_LAST_MOD+lunchtime_t.fechavalido, QMessageBox.Ok)
-								inserted=False
-							elif(lunchtime_t.minutos!=int(lt_minutes) and to_date(lunchtime_t.fechavalido,True)==datetime.date(int(year),int(month),int(day))):
-								QMessageBox.warning(self, 'Error',CREATE_LUNCHTIME_INVALID_DATE, QMessageBox.Ok)
-								inserted=False
-							elif(to_date(lunchtime_t.fechavalido,True)!=datetime.date(int(year),int(month),int(day))):
-								lunchtime_t.fechavalido=date_to_str(year,month,day)
-								if(lunchtime_t.insert_new_lunchtime(lt_minutes,db.cursor())):
-									self.worker.update_new_lunchtime(lunchtime_t.id,db.cursor())
+							if(lunchtime_t.minutos!=lt_minutes):
+								if(to_date(lunchtime_t.fechavalido,True)>=datetime.date(int(year),int(month),int(day))):
+									QMessageBox.warning(self, 'Error',CREATE_LUNCHTIME_INVALID_DATE+CREATE_LUNCHTIME_LAST_MOD+lunchtime_t.fechavalido, QMessageBox.Ok)
+									inserted=False
+								else:
+									lunchtime_t.fechavalido=date_to_str(year,month,day)
+									if(lunchtime_t.insert_new_lunchtime(lt_minutes,db.cursor())):
+										self.worker.update_new_lunchtime(lunchtime_t.id,db.cursor())
 						if(inserted):
 							db.commit()
 							QMessageBox.question(self, 'Message',MOD_WORKER_SUCCESS,QMessageBox.Ok)

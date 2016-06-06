@@ -73,7 +73,7 @@ class main_view_reportes(QWidget):
 			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
 		else:
 			self.singleton_widget_rh=True
-			self.ventana_rh = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_HORAS_MESSAGE,False)
+			self.ventana_rh = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_HORAS_MESSAGE,True)
 			self.ventana_rh.exec_()
 			if(self.ventana_rh.selected):
 				worker = self.ventana_rh.selected
@@ -87,7 +87,7 @@ class main_view_reportes(QWidget):
 			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
 		else:
 			self.singleton_widget_rt=True
-			self.ventana_rt = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_TARDANZA_MESSAGE,False)
+			self.ventana_rt = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_TARDANZA_MESSAGE,True)
 			self.ventana_rt.exec_()
 			if(self.ventana_rt.selected):
 				worker = self.ventana_rt.selected

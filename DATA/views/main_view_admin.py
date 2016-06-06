@@ -131,7 +131,7 @@ class main_view_admin(QWidget):
 			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
 		else:
 			self.singleton_widget=True
-			self.ventana = search_worker_view.search_worker_view(SEARCH_WORKER_CONTROL_MESSAGE,False)
+			self.ventana = search_worker_view.search_worker_view(SEARCH_WORKER_CONTROL_MESSAGE,True)
 			self.ventana.exec_()
 			if(self.ventana.selected):
 				worker = self.ventana.selected

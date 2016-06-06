@@ -22,6 +22,16 @@ def get_lunchtime_minutes(idlt,db):
 		return lunch[3]
 	return DEFAULT_LUNCHTIME
 
+def get_lunchtime_minutes_by_date_pin(str_date,pin,db):
+	if(db==None):
+		return DEFAULT_LUNCHTIME
+	cursor=db.cursor()
+	select_lunchtime="SELECT * FROM `lunchtime` WHERE pin='%s' and fechavalido<='%s' ORDER BY fechavalido DESC"%(pin,str_date)
+	cursor.execute(select_lunchtime)
+	for lunch in cursor:
+		return lunch[3]
+	return DEFAULT_LUNCHTIME
+
 def get_lunchtime_date(idlt,db):
 	if(db==None):
 		return datetime.datetime.now().date()

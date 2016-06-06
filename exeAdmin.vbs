@@ -4,4 +4,4 @@ Dim geekside,nret
 
 Set geekside=WScript.CreateObject("WScript.Shell")
 
-nret=geekside.Run("pythondw.exe SoftwareAdmin.pywc",1,TRUE)
+nret=geekside.Run("C:/Python27/pythonw.exe SoftwareAdmin.py",1,TRUE)
