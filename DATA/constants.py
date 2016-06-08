@@ -49,7 +49,7 @@ def mins_to_str_time_ot(mins,w_dat=False):
 		if(w_dat):
 			return_str="Dias: "+str(dias)+" - Tiempo Total: "+return_str
 		if(nmins):
-			return_str="Temprano: "+return_str
+			return_str="Extra: "+return_str
 		return return_str
 	return "None"
 
@@ -412,3 +412,4 @@ SIZE_COLUMNS_TABLE_REPORTE_TARDANZA			= 7
 #Importantes
 TOTAL_MARKS_LIMIT_FOR_DAY					= 4
 TOTAL_MARKS_SATURDAY						= 2
+TOTAL_TIME_TARDANZA_LIMIT					= 5

@@ -290,8 +290,8 @@ class tardanza_reporte_view(QDialog):
 
 	def insert_reporte_table(self):
 		self.clear_reporte_table()
-		if(self.minutos>-1):
-			self.text_total_horas.setText(mins_to_str_time_ot(self.minutos,True))
+		if(self.minutos!=None):
+			self.text_total_horas.setText(self.minutos)
 		else:
 			self.text_total_horas.setText(REPORTE_TOTAL_HORAS_EMPTY)
 		if(len(self.reporte_matrix)):
