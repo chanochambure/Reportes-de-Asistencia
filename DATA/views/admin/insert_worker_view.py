@@ -116,7 +116,7 @@ class insert_worker_view(QDialog):
 		intro_min = self.text_intro_min.currentText()
 		exit_hour = self.text_exit_hour.currentText()
 		exit_min = self.text_exit_min.currentText()
-		lt_minutes = int(self.text_lunchtime.text())
+		lt_minutes = self.text_lunchtime.text()
 		if(pin == '' or name == '' or fname=='' or mname=='' or lt_minutes==''):
 			QMessageBox.warning(self, 'Error',CREATE_WORKER_EMPTY_CAMP, QMessageBox.Ok)
 		elif(str_is_invalid(pin) or str_is_invalid(name) or str_is_invalid(fname) or str_is_invalid(mname) or str_is_invalid(lt_minutes)):
@@ -133,7 +133,7 @@ class insert_worker_view(QDialog):
 					if(controller_trabajador.pin_exist(pin,db)):
 						QMessageBox.warning(self, 'Error',CREATE_WORKER_ALREADY_HAS_BEEN_USED, QMessageBox.Ok)
 					else:
-						new_lunchtime = lunchtime.Lunchtime([0,pin,FIRST_DATE,lt_minutes])
+						new_lunchtime = lunchtime.Lunchtime([0,pin,FIRST_DATE,int(lt_minutes)])
 						new_lunchtime.insert(db.cursor())
 						new_worker = trabajador.Trabajador([pin,name,fname,mname,True,time_to_str(intro_hour,intro_min),time_to_str(exit_hour,exit_min),new_lunchtime.id])
 						new_worker.insert(db.cursor())
