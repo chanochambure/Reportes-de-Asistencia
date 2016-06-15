@@ -100,7 +100,7 @@ def to_date(str_date,tipo):
 #UNICODE
 def str_is_invalid(str_u):
 	for char_u in unicode(str_u):
-		if(char_u=="'" or char_u==";" or char_u=='"'):
+		if(char_u==unicode("'") or char_u==unicode(";") or char_u==unicode('"')):
 			return True
 	return False
 
@@ -119,9 +119,12 @@ BUTTON_MARKS						= "Insertar Marcacion"
 BUTTON_MARKS_FROM_FILE				= "Insertar Marcaciones desde un archivo"
 BUTTON_MODIFY_WORKER				= "Modificar Trabajador"
 BUTTON_CONTROL_MARKS				= "Control de Marcaciones"
+BUTTON_INSERT_AREA					= "Insertar Area"
+BUTTON_CONTROL_AREAS				= "Control de Areas"
 BUTTON_EXIT							= "Salir"
 ERROR_A_PROCESS_OPENED				= "Tiene ya una ventana abierta"
 ADMIN_INSERT_WORKER_TITLE			= "Insertar Trabajador"
+ADMIN_INSERT_AREA_TITLE				= "Insertar Area"
 ADMIN_INSERT_WORKER_PIN				= "Numero de Identificacion"
 ADMIN_INSERT_WORKER_NAME			= "Nombre"
 ADMIN_INSERT_WORKER_FNAME			= "Apellido Paterno"
@@ -130,6 +133,7 @@ ADMIN_INSERT_INTRO_HOUR				= "Hora de Entrada"
 ADMIN_INSERT_EXIT_HOUR				= "Hora de Salida"
 ADMIN_MOD_WORKER_LUNCHDATE			= "Fecha de Cambio"
 ADMIN_INSERT_LUNCHTIME_MINUTES		= "Tiempo para Refrigerio"
+ADMIN_CONTROL_AREA_TITLE			= "Control de Areas"
 BUTTON_CREATE_WORKER				= "Insertar"
 BUTTON_BACK							= "Atras"
 CREATE_WORKER_EMPTY_CAMP			= "Existe algun Campo Vacio"
@@ -144,6 +148,7 @@ SEARCH_WORKER_MODIFY_MESSAGE		= "Modificar"
 SEARCH_WORKER_MARKS_MESSAGE			= "Insertar Marcacion"
 SEARCH_WORKER_CONTROL_MESSAGE		= "Control"
 SEARCH_WORKER_TITLE					= "Buscar Trabajador"
+SEARCH_AREA_TITLE					= "Buscar Area"
 SEARCH_WORKER_VIEW_TITLE			= "Buscar Trabajador"
 BUTTON_SEARCH_WORKER				= "Buscar"
 
@@ -190,17 +195,41 @@ ADMIN_CONTROL_MARKS_VALIDO			= "Mostrar No Validos"
 CREATE_LUNCHTIME_INVALID_DATE		= "No puede crear un tiempo de refrigerio para un fecha que es anterior al ultimo refrigerio"
 CREATE_LUNCHTIME_LAST_MOD			= "\n Fecha Ultimo Refrigerio: "
 BUTTON_INSERT_NEW_MARK				= "Crear Nueva Marcacion"
+CREATE_AREA_EMPTY_CAMP				= "Existe un campo vacio"
+CREATE_AREA_QUESTION				= "Esta seguro de crear un area con este nombre"
+CREATE_AREA_INVALID_CAMP			= "El campo tiene un caracter no valido"
+CREATE_AREA_SUCCESS					= "Area Insertada"
+SEARCH_AREA_CONTROL_MESSAGE			= "Control de Area"
+SEARCH_AREA_VIEW_TITLE				= "Buscar Area"
+BUTTON_SEARCH_AREA					= "Buscar"
+SEARCH_TITLE_AREA_ROWS				= ["Nombre","Accion"]
+ADMIN_CONTROL_AREA_TYPE_TEXT		= "Tipos"
+ADMIN_CONTROL_REMOVE_AREA			= "Eliminar Area"
+REMOVE_AREA_SUCCESS					= "Area Eliminada"
+REMOVE_AREA_QUESTION				= "Desea eliminar el area, esto eliminara todos los tipos y tambien las relaciones existentes entre trabajadores y tipos"
+ADMIN_CONTROL_AREA_INSERT_TYPE		= "Insertar Tipo"
+ADMIN_INSERT_TYPE_TITLE				= "Insertar Tipo"
+CREATE_TYPE_QUESTION				= "Esta seguro de crear un tipo con este nombre para el area de "
+CREATE_TYPE_SUCCESS					= "Tipo Insertado"
+CONTROL_AREA_LIST_HEADER_TABLE		= ["Nombre","Control","Eliminar"]
+CONTROL_AREA_CONTROL_TYPE			= "Control"
+CONTROL_AREA_REMOVE_TYPE			= "Remover"
+REMOVE_TYPE_QUESTION				= "Esta seguro de eliminar este tipo, esto eliminara todas las relaciones existentes entre trabajadores y tipos"
+REMOVE_TYPE_SUCCESS					= "Tipo Eliminado"
+
 
 #NUMBERS ADMIN
 GRID_X_MAIN_WINDOW_ADMIN				= 3
-GRID_Y_MAIN_WINDOW_ADMIN				= 8
+GRID_Y_MAIN_WINDOW_ADMIN				= 10
 GRID_X_POSITION_TITLE					= 0
 GRID_X_POSITION_INSERT_WORKER			= 2
 GRID_X_POSITION_MODIFY_WORKER			= 3
 GRID_X_POSITION_INSERT_MARKS			= 4
 GRID_X_POSITION_INSERT_MARKS_FROM_FILE	= 5
 GRID_X_POSITION_CONTROL_MARKS			= 6
-GRID_X_POSITION_EXIT					= 7
+GRID_X_POSITION_INSERT_AREA				= 7
+GRID_X_POSITION_CONTROL_AREAS			= 8
+GRID_X_POSITION_EXIT					= 9
 GRID_Y_POSITION_BUTTON					= 1
 BUTTON_SIZE_MAIN_VIEW					= 250
 FONT_TITLE_SIZE							= 18
@@ -319,6 +348,49 @@ GRID_Y_POSITION_MODIFY_MARK				= 1
 GRID_X_POSITION_BACK_MODIFY_MARK		= 6
 GRID_Y_POSITION_BACK_MODIFY_MARK		= 0
 
+ADMIN_INSERT_AREA_X						= 3
+ADMIN_INSERT_AREA_Y						= 2
+BUTTON_SIZE_INSERT_AREA_VIEW_X			= 150
+BUTTON_SIZE_INSERT_AREA_VIEW_Y			= 40
+GRID_X_POSITION_INSERT_AREA_TITLE		= 0
+GRID_Y_POSITION_INSERT_AREA_TITLE		= 0
+GRID_X_POSITION_NAME_INSERT_AREA		= 1
+GRID_Y_POSITION_LABEL_INSERT_AREA		= 0
+GRID_Y_POSITION_TEXT_INSERT_AREA		= 1
+GRID_X_POSITION_CREATE_INSERT_AREA		= 2
+GRID_Y_POSITION_CREATE_INSERT_AREA		= 1
+GRID_X_POSITION_BACK_INSERT_AREA		= 2
+GRID_Y_POSITION_BACK_INSERT_AREA		= 0
+
+BUTTON_SIZE_SEARCH_AREA_VIEW_X			= 150
+BUTTON_SIZE_SEARCH_AREA_VIEW_Y			= 40
+SIZE_COLUMNS_TABLE_AREA					= 2
+SEARCH_AREA_X_GRID						= 12
+SEARCH_AREA_Y_GRID						= 5
+GRID_X_POSITION_SEARCH_AREA_TITLE		= 0
+GRID_Y_POSITION_SEARCH_AREA_TITLE		= 0
+
+CONTROL_AREA_X_GRID						= 6
+CONTROL_AREA_Y_GRID						= 6
+GRID_X_POSITION_TITLE_CONTROL_AREA		= 0
+GRID_Y_POSITION_TITLE_CONTROL_AREA		= 0
+GRID_X_POSITION_TYPE_CONTROL_AREA		= 1
+GRID_Y_POSITION_TYPE_CONTROL_AREA		= 0
+GRID_X_POSITION_BUTTON_BACK_C_AREA		= 5
+GRID_Y_POSITION_BUTTON_BACK_C_AREA		= 5
+GRID_X_POSITION_BUTTON_REMO_C_AREA		= 0
+GRID_Y_POSITION_BUTTON_REMO_C_AREA		= 5
+GRID_X_POSITION_BUTTON_INS_T_C_AREA		= 2
+GRID_Y_POSITION_BUTTON_INS_T_C_AREA		= 5
+SIZE_COLUMNS_TABLE_TYPES_AREA			= 3
+GRID_X_POSITION_TABLE_C_AREA			= 2
+GRID_Y_POSITION_TABLE_C_AREA			= 0
+GRID_X_SIZE_TABLE_C_AREA				= 4
+GRID_Y_SIZE_TABLE_C_AREA				= 4
+
+
+
+
 #TEXT REPORTES
 MAIN_VIEW_TITLE_REPORTES					= "Rerpotes de Asistencias"
 BUTTON_REPORTES_LUCHTIME					= "Tiempos de Refrigerio"
@@ -404,6 +476,7 @@ GRID_X_POSITION_REPORTE_HORAS_TABLE_2		= 6
 GRID_Y_POSITION_REPORTE_HORAS_TABLE_1		= 0
 GRID_Y_POSITION_REPORTE_HORAS_TABLE_2		= 5
 SIZE_COLUMNS_TABLE_REPORTE_TARDANZA			= 7
+
 
 
 

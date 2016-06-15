@@ -10,8 +10,8 @@ from PyQt4.QtGui import *
 BASE_DIR='../'
 sys.path.insert(0,BASE_DIR)
 from constants import *
-from views.admin import insert_worker_view,insert_marks_view,modify_worker_view,control_marks_view
-from views import search_worker_view
+from views.admin import insert_worker_view,insert_marks_view,modify_worker_view,control_marks_view,insert_area_view,control_area_view
+from views import search_worker_view,search_area_view
 from controller import controller_mark
 
 class main_view_admin(QWidget):
@@ -20,7 +20,7 @@ class main_view_admin(QWidget):
 		super(main_view_admin, self).__init__()
 		self.main_view_create()
 		screenGeometry = QApplication.desktop().availableGeometry()
-		self.resize(screenGeometry.width()/4,screenGeometry.height()/2)
+		self.resize(screenGeometry.width()/4,2*screenGeometry.height()/3)
 		self.setWindowTitle(MAIN_TITLE)
 		self.show()
 		self.singleton_widget=False
@@ -36,6 +36,8 @@ class main_view_admin(QWidget):
 		button_insert_marks = QPushButton(BUTTON_MARKS,self)
 		button_insert_marks_from_file = QPushButton(BUTTON_MARKS_FROM_FILE,self)
 		button_control_marks = QPushButton(BUTTON_CONTROL_MARKS,self)
+		button_insert_area = QPushButton(BUTTON_INSERT_AREA,self)
+		button_control_area = QPushButton(BUTTON_CONTROL_AREAS,self)
 		button_exit = QPushButton(BUTTON_EXIT,self)
 
 		#Modificacion widgets
@@ -46,7 +48,9 @@ class main_view_admin(QWidget):
 		button_modify_worker.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_modify_worker.height())
 		button_insert_marks.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_insert_marks.height())
 		button_insert_marks_from_file.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_insert_marks_from_file.height())
-		button_control_marks.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_exit.height())
+		button_control_marks.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_control_marks.height())
+		button_insert_area.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_insert_area.height())
+		button_control_area.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_control_area.height())
 		button_exit.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_exit.height())
 
 		#FUNCTION
@@ -55,6 +59,8 @@ class main_view_admin(QWidget):
 		self.connect(button_insert_marks, SIGNAL("clicked()"),self.insert_marks)
 		self.connect(button_insert_marks_from_file, SIGNAL("clicked()"),self.insert_marks_from_file)
 		self.connect(button_control_marks, SIGNAL("clicked()"),self.control_marks)
+		self.connect(button_insert_area, SIGNAL("clicked()"),self.insert_area)
+		self.connect(button_control_area, SIGNAL("clicked()"),self.control_areas)
 		self.connect(button_exit, SIGNAL("clicked()"),self.close)
 
 		#GRID SIZE
@@ -68,6 +74,8 @@ class main_view_admin(QWidget):
 		grid.addWidget(button_insert_marks,GRID_X_POSITION_INSERT_MARKS,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_insert_marks_from_file,GRID_X_POSITION_INSERT_MARKS_FROM_FILE,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_control_marks,GRID_X_POSITION_CONTROL_MARKS,GRID_Y_POSITION_BUTTON)
+		grid.addWidget(button_insert_area,GRID_X_POSITION_INSERT_AREA,GRID_Y_POSITION_BUTTON)
+		grid.addWidget(button_control_area,GRID_X_POSITION_CONTROL_AREAS,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_exit,GRID_X_POSITION_EXIT,GRID_Y_POSITION_BUTTON)
 
 		#LAYAOUT
@@ -136,6 +144,30 @@ class main_view_admin(QWidget):
 			if(self.ventana.selected):
 				worker = self.ventana.selected
 				self.ventana = control_marks_view.control_marks_view(worker)
+				self.ventana.exec_()
+			self.ventana=None
+			self.singleton_widget=False
+
+	def insert_area(self):
+		if(self.singleton_widget):
+			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
+		else:
+			self.singleton_widget=True
+			self.ventana = insert_area_view.insert_area_view()
+			self.ventana.exec_()
+			self.ventana=None
+			self.singleton_widget=False
+
+	def control_areas(self):
+		if(self.singleton_widget):
+			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
+		else:
+			self.singleton_widget=True
+			self.ventana = search_area_view.search_area_view(SEARCH_AREA_CONTROL_MESSAGE)
+			self.ventana.exec_()
+			if(self.ventana.selected):
+				area = self.ventana.selected
+				self.ventana = control_area_view.control_area_view(area)
 				self.ventana.exec_()
 			self.ventana=None
 			self.singleton_widget=False
