@@ -34,7 +34,7 @@ def mins_to_str_time(mins,minutos_de_trabajo):
 			str_tr=str(horas_t)+":"+real_mins_t+" h"
 			return "Dias: "+str(dias)+" - Tiempo por Dia: "+str_tr+" - Tiempo Total: "+str(horas)+":"+real_mins+" h"
 		return str(horas)+":"+real_mins+" h"
-	return "Error - No tiene las Marcaciones obligatorias de la fecha"
+	return "Error - Faltan Marcaciones"
 
 def mins_to_str_time_ot(mins,w_dat=False):
 	if(mins!=None):
@@ -216,7 +216,18 @@ CONTROL_AREA_CONTROL_TYPE			= "Control"
 CONTROL_AREA_REMOVE_TYPE			= "Remover"
 REMOVE_TYPE_QUESTION				= "Esta seguro de eliminar este tipo, esto eliminara todas las relaciones existentes entre trabajadores y tipos"
 REMOVE_TYPE_SUCCESS					= "Tipo Eliminado"
-
+ADMIN_CONTROL_TYPE_TITLE			= "Control de Tipo"
+ADMIN_CONTROL_AREA_RELATION_TEXT	= "Trabajadores"
+ADMIN_CONTROL_AREA_INSERT_RELATION	= "Insertar Trabajador"
+SEARCH_WORKER_SELECTION_MESSAGE		= "Seleccionar"
+INSERT_RELATION_QUESTION_1			= "Desea establecerle a "
+INSERT_RELATION_QUESTION_2			= " el tipo: "
+CONTROL_TYPE_LIST_HEADER_TABLE		= ["Nombre","Apellido Paterno","Apellido Materno","Remover"]
+INSERT_RELATION_SUCCESS				= "Trabajador Insertado"
+INSERT_RELATION_ERROR				= "El trabajador seleccionado ya tiene este tipo en esta area"
+CONTROL_TYPE_REMOVE_RELATION		= "Remover"
+REMOVE_WORKER_QUESTION				= "Esta seguro de eliminar el tipo de este trabajador"
+REMOVE_WORKER_SUCEESS				= "Relacion Removida"
 
 #NUMBERS ADMIN
 GRID_X_MAIN_WINDOW_ADMIN				= 3
@@ -388,6 +399,21 @@ GRID_Y_POSITION_TABLE_C_AREA			= 0
 GRID_X_SIZE_TABLE_C_AREA				= 4
 GRID_Y_SIZE_TABLE_C_AREA				= 4
 
+CONTROL_TYPE_X_GRID						= 6
+CONTROL_TYPE_Y_GRID						= 5
+GRID_X_POSITION_TITLE_CONTROL_TYPE		= 0
+GRID_Y_POSITION_TITLE_CONTROL_TYPE		= 0
+GRID_X_POSITION_RELATION_CONTROL_TYPE	= 1
+GRID_Y_POSITION_RELATION_CONTROL_TYPE	= 0
+GRID_X_POSITION_BUTTON_BACK_C_TYPE		= 4
+GRID_Y_POSITION_BUTTON_BACK_C_TYPE		= 4
+GRID_X_POSITION_BUTTON_INS_R_C_TYPE		= 2
+GRID_Y_POSITION_BUTTON_INS_R_C_TYPE		= 4
+SIZE_COLUMNS_TABLE_WORK_TYPE			= 4
+GRID_X_POSITION_TABLE_C_TYPE			= 2
+GRID_Y_POSITION_TABLE_C_TYPE			= 0
+GRID_X_SIZE_TABLE_C_TYPE				= 4
+GRID_Y_SIZE_TABLE_C_TYPE				= 4
 
 
 
@@ -396,9 +422,11 @@ MAIN_VIEW_TITLE_REPORTES					= "Rerpotes de Asistencias"
 BUTTON_REPORTES_LUCHTIME					= "Tiempos de Refrigerio"
 BUTTON_REPORTES_TARDANZAS					= "Tardanzas"
 BUTTON_REPORTES_HORAS						= "Horas Trabajadas"
+BUTTON_REPORTES_HORAS_AREA					= "Lista - Horas Trabajadas"
 REPORTES_LUNCHTIME_TITLE					= "Tiempos de Refrigerio"
 REPORTES_TARDANZA_TITLE						= "Tardanzas"
 REPORTES_HORAS_TITLE						= "Horas Trabajadas"
+REPORTES_HORAS_AREA_TITLE					= "Lista - Horas Trabajadas"
 SEARCH_SEE_REPORTES_LUNCHTIME_MESSAGE		= "Ver Refrigerios"
 SEARCH_SEE_REPORTES_TARDANZA_MESSAGE		= "Ver Tardanzas"
 SEARCH_SEE_REPORTES_HORAS_MESSAGE			= "Horas Trabajadas"
@@ -418,12 +446,16 @@ SAVE_FILE_TITLE								= "Guardar Rerporte"
 CREATE_EXCEL_SUCCESS						= "Reporte Guardado"
 EXCEL_PROBLEM								= "No tiene permisos para editar el archivo, cierre todos los programas que esten usando el archivo"
 MODIFICAR_REPORTE_MARKS						= "Ver"
+REPO_AREA_NAME_R_H_A						= "Area"
+REPO_TIPO_NAME_R_H_A						= "Tipo"
+REPORTE_HORAS_AREA_HEADER					= ["Nombre Completo","Total Trabajado"]
 
 #NUMBERS REPORTES
-GRID_X_MAIN_WINDOW_REPORTES					= 6
+GRID_X_MAIN_WINDOW_REPORTES					= 7
 GRID_Y_MAIN_WINDOW_REPORTES					= 3
 GRID_X_POSITION_TITLE_R						= 0
-GRID_X_POSITION_EXIT_R						= 5
+GRID_X_POSITION_EXIT_R						= 6
+GRID_X_POSITION_REPORTE_HORAS_A_R			= 5
 GRID_X_POSITION_REPORTE_LUNCHTIME_R			= 4
 GRID_X_POSITION_REPORTE_TARDANZA_R			= 3
 GRID_X_POSITION_REPORTE_HORAS_R				= 2
@@ -477,12 +509,36 @@ GRID_Y_POSITION_REPORTE_HORAS_TABLE_1		= 0
 GRID_Y_POSITION_REPORTE_HORAS_TABLE_2		= 5
 SIZE_COLUMNS_TABLE_REPORTE_TARDANZA			= 7
 
-
+REPORTE_HORAS_AREA_X_GRID					= 10
+REPORTE_HORAS_AREA_Y_GRID					= 6
+GRID_X_POSITION_TITLE_R_HORAS_AREA			= 0
+GRID_Y_POSITION_TITLE_R_HORAS_AREA			= 0
+GRID_X_POSITION_BUTTON_BACK_R_H_A			= 9
+GRID_Y_POSITION_BUTTON_BACK_R_H_A			= 1
+GRID_X_POSITION_EXCEL_R_H_A					= 9
+GRID_Y_POSITION_EXCEL_R_H_A					= 4
+GRID_X_POSITION_REPO_R_H_A					= 2
+GRID_Y_POSITION_REPO_R_H_A					= 5
+GRID_X_POSITION_DATEMARK_R_H_A				= 2
+GRID_Y_POSITION_DAY_DATEMARK_R_H_A			= 1
+GRID_Y_POSITION_MONTH_DATEMARK_R_H_A		= 2
+GRID_Y_POSITION_YEAR_DATEMARK_R_H_A			= 3
+GRID_X_POSITION_CONFIG_R_H_A				= 1
+GRID_Y_POSITION_R_H_A_LABEL_A				= 1
+GRID_Y_POSITION_R_H_A_LABEL_T				= 3
+GRID_Y_POSITION_R_H_A_BOX_A					= 2
+GRID_Y_POSITION_R_H_A_BOX_T					= 4
+GRID_X_POSITION_R_H_A_T						= 4
+GRID_Y_POSITION_R_H_A_T						= 0
+GRID_X_SIZE_R_H_A_T							= 5
+GRID_Y_SIZE_R_H_A_T							= 6
+SIZE_COLUMNS_TABLE_REPORTE_HORAS_AREA		= 2
 
 
 
 
 #Importantes
+VALUE_NOT_WORK								= "-"
 TOTAL_MARKS_LIMIT_FOR_DAY					= 4
 TOTAL_MARKS_SATURDAY						= 2
 TOTAL_TIME_TARDANZA_LIMIT					= 5

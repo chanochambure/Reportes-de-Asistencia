@@ -10,6 +10,16 @@ sys.path.insert(0,BASE_DIR)
 from models import trabajador,mark,lunchtime,area
 from constants import *
 
+def get_r_areas(db):
+	cursor=db.cursor()
+	list_areas=[]
+	select_areas="""select * from Area"""
+	select_areas+=" ORDER BY name"
+	cursor.execute(select_areas)
+	for row in cursor:
+		list_areas.append(area.Area(row))
+	return list_areas
+
 def get_areas(db,str_name):
 	cursor=db.cursor()
 	list_areas=[]

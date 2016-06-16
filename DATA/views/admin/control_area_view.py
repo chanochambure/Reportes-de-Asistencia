@@ -61,6 +61,7 @@ class control_area_view(QDialog):
 		font_title = QFont()
 		font_title.setPointSize(FONT_TITLE_SIZE)
 		label_title.setFont(font_title)
+		label_tipe_text.setFont(font_title)
 
 		#FUNCTION
 		self.connect(button_back, SIGNAL("clicked()"),self.close)
