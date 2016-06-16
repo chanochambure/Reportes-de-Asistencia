@@ -30,3 +30,12 @@ def get_areas(db,str_name):
 	for row in cursor:
 		list_areas.append(area.Area(row))
 	return list_areas
+
+def exist_this_area(db,str_name):
+	cursor=db.cursor()
+	select_areas="""select * from Area where
+					name = '%s'"""%(str_name)
+	cursor.execute(select_areas)
+	for row in cursor:
+		return True
+	return False

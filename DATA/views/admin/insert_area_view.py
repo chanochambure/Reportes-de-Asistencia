@@ -72,9 +72,13 @@ class insert_area_view(QDialog):
 			if reply == QMessageBox.Yes:
 				db=get_connection()
 				if(db):
-					new_area = area.Area([0,name])
-					new_area.insert(db.cursor())
-					db.commit()
-					db.close()
-					QMessageBox.question(self, 'Message',CREATE_AREA_SUCCESS,QMessageBox.Ok)
-					self.close()
+					if(controller_area.exist_this_area(db,name)):
+						db.close()
+						QMessageBox.warning(self, 'Error',CREATE_AREA_EXIST, QMessageBox.Ok)
+					else:
+						new_area = area.Area([0,name])
+						new_area.insert(db.cursor())
+						db.commit()
+						db.close()
+						QMessageBox.question(self, 'Message',CREATE_AREA_SUCCESS,QMessageBox.Ok)
+						self.close()

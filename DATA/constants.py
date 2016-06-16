@@ -228,6 +228,8 @@ INSERT_RELATION_ERROR				= "El trabajador seleccionado ya tiene este tipo en est
 CONTROL_TYPE_REMOVE_RELATION		= "Remover"
 REMOVE_WORKER_QUESTION				= "Esta seguro de eliminar el tipo de este trabajador"
 REMOVE_WORKER_SUCEESS				= "Relacion Removida"
+CREATE_AREA_EXIST					= "El area ya existe"
+CREATE_TYPE_EXIST					= "El tipo ya existe"
 
 #NUMBERS ADMIN
 GRID_X_MAIN_WINDOW_ADMIN				= 3

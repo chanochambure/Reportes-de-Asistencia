@@ -12,7 +12,7 @@ BASE_DIR='../../'
 sys.path.insert(0,BASE_DIR)
 from constants import *
 from models import tipo
-from controller import controller_area
+from controller import controller_tipo
 
 class insert_type_view(QDialog):
 	def __init__(self,area_to_Set,parent=None):
@@ -73,9 +73,13 @@ class insert_type_view(QDialog):
 			if reply == QMessageBox.Yes:
 				db=get_connection()
 				if(db):
-					new_type = tipo.Tipo([0,self.area.id,name])
-					new_type.insert(db.cursor())
-					db.commit()
-					db.close()
-					QMessageBox.question(self, 'Message',CREATE_TYPE_SUCCESS,QMessageBox.Ok)
-					self.close()
+					if(controller_tipo.exist_this_type(db,self.area.id,name)):
+						db.close()
+						QMessageBox.warning(self, 'Error',CREATE_TYPE_EXIST, QMessageBox.Ok)
+					else:
+						new_type = tipo.Tipo([0,self.area.id,name])
+						new_type.insert(db.cursor())
+						db.commit()
+						db.close()
+						QMessageBox.question(self, 'Message',CREATE_TYPE_SUCCESS,QMessageBox.Ok)
+						self.close()

@@ -32,3 +32,12 @@ def get_tipos(db,int_id):
 	for row in cursor:
 		list_tipos.append(tipo.Tipo(row))
 	return list_tipos
+
+def exist_this_type(db,int_id,str_name):
+	cursor=db.cursor()
+	select_tipos="""select * from Tipo where
+					id_area='%d' and name='%s'"""%(int_id,str_name)
+	cursor.execute(select_tipos)
+	for row in cursor:
+		return True
+	return False
