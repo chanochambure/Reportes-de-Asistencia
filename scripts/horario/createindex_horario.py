@@ -13,14 +13,9 @@ from constants import *
 db=get_connection()
 cursor=db.cursor()
 
-cursor.execute("""CREATE TABLE Marcacion
-				(
-				id int PRIMARY KEY AUTO_INCREMENT,
-				pin varchar(15),
-				hour DATETIME,
-				tipo boolean,
-				valido boolean
-				)""")
+cursor.execute("""CREATE INDEX horario_pin
+				ON Horario
+				(pin)""")
 
 db.commit()
 db.close()

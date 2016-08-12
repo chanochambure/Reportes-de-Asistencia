@@ -100,7 +100,7 @@ def to_date(str_date,tipo):
 #UNICODE
 def str_is_invalid(str_u):
 	for char_u in unicode(str_u):
-		if(char_u==unicode("'") or char_u==unicode(";") or char_u==unicode('"')):
+		if(char_u==unicode("'") or char_u==unicode(";") or char_u==unicode('"') or ord(char_u)>=128):
 			return True
 	return False
 
@@ -131,7 +131,7 @@ ADMIN_INSERT_WORKER_FNAME			= "Apellido Paterno"
 ADMIN_INSERT_WORKER_MNAME			= "Apellido Materno"
 ADMIN_INSERT_INTRO_HOUR				= "Hora de Entrada"
 ADMIN_INSERT_EXIT_HOUR				= "Hora de Salida"
-ADMIN_MOD_WORKER_LUNCHDATE			= "Fecha de Cambio"
+ADMIN_MOD_WORKER_LUNCHDATE			= "Fecha Validez Refrigerio"
 ADMIN_INSERT_LUNCHTIME_MINUTES		= "Tiempo para Refrigerio"
 ADMIN_CONTROL_AREA_TITLE			= "Control de Tipos"
 BUTTON_CREATE_WORKER				= "Insertar"
@@ -230,6 +230,7 @@ REMOVE_WORKER_QUESTION				= "Esta seguro de eliminar el area de este trabajador"
 REMOVE_WORKER_SUCEESS				= "Relacion Removida"
 CREATE_AREA_EXIST					= "El tipo ya existe"
 CREATE_TYPE_EXIST					= "El area ya existe"
+ADMIN_MOD_WORKER_HORARIODATE		= "Fecha Validez Horario"
 
 #NUMBERS ADMIN
 GRID_X_MAIN_WINDOW_ADMIN				= 3
@@ -322,7 +323,7 @@ GRID_X_POSITION_TIME					= 4
 GRID_Y_POSITION_HOUR_TIME				= 1
 GRID_Y_POSITION_MIN_TIME				= 2
 
-MORE_YEARS								= 20
+MORE_YEARS								= 25
 COLUMNS_IN_FILE							= 3
 ERROR_FILE								= -1
 

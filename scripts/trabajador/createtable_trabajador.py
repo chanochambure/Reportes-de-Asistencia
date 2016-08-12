@@ -20,8 +20,7 @@ cursor.execute("""CREATE TABLE Trabajador
 				father_last_name varchar(30),
 				mother_last_name varchar(30),
 				activo boolean,
-				hora_entrada TIME,
-				hora_salida TIME,
+				idh int,
 				idlt int
 				)""")
 

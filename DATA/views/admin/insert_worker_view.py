@@ -11,7 +11,7 @@ from datetime import datetime
 BASE_DIR='../../'
 sys.path.insert(0,BASE_DIR)
 from constants import *
-from models import trabajador, lunchtime
+from models import trabajador, lunchtime, horario
 from controller import controller_trabajador
 
 class insert_worker_view(QDialog):
@@ -135,7 +135,9 @@ class insert_worker_view(QDialog):
 					else:
 						new_lunchtime = lunchtime.Lunchtime([0,pin,FIRST_DATE,int(lt_minutes)])
 						new_lunchtime.insert(db.cursor())
-						new_worker = trabajador.Trabajador([pin,name,fname,mname,True,time_to_str(intro_hour,intro_min),time_to_str(exit_hour,exit_min),new_lunchtime.id])
+						new_horario = horario.Horario([0,pin,FIRST_DATE,time_to_str(intro_hour,intro_min),time_to_str(exit_hour,exit_min)])
+						new_horario.insert(db.cursor())
+						new_worker = trabajador.Trabajador([pin,name,fname,mname,True,new_horario.id,new_lunchtime.id])
 						new_worker.insert(db.cursor())
 						db.commit()
 						db.close()
