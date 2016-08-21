@@ -17,7 +17,7 @@ class Marcacion():
 	def insert(self,cursor_db):
 		insert_mark="""INSERT INTO Marcacion
 								(pin,hour,tipo,valido)
-								values('%s','%s',b'%d'
+								values('%s','%s',b'%d',b'%d'
 								)"""%(self.pin,self.hora,self.tipo,self.valido)
 		cursor_db.execute(insert_mark)
 		return True

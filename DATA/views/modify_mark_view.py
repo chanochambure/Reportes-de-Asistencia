@@ -32,12 +32,14 @@ class modify_mark_view(QDialog):
 		label_date = QLabel(ADMIN_INSERT_MARK_DATE)
 		label_time = QLabel(ADMIN_INSERT_MARK_TIME)
 		label_valido = QLabel(ADMIN_MODIFY_MARK_VALID)
+		label_tipo = QLabel(ADMIN_INSERT_MARK_TYPE)
 		self.d_box = QComboBox()
 		self.m_box = QComboBox()
 		self.y_box = QComboBox()
 		self.text_hour = QComboBox()
 		self.text_min = QComboBox()
 		self.text_valido = QRadioButton()
+		self.text_tipo = QComboBox()
 		button_insert = QPushButton(BUTTON_MODIFY_MARKS,self)
 		button_back = QPushButton(BUTTON_BACK,self)
 
@@ -65,12 +67,14 @@ class modify_mark_view(QDialog):
 		grid.addWidget(label_date,GRID_X_POSITION_DATE,GRID_Y_POSITION_LABEL)
 		grid.addWidget(label_time,GRID_X_POSITION_TIME,GRID_Y_POSITION_LABEL)
 		grid.addWidget(label_valido,GRID_X_POSITION_TIME+1,GRID_Y_POSITION_LABEL)
+		grid.addWidget(label_tipo,GRID_X_POSITION_TIME+2,GRID_Y_POSITION_LABEL)
 		grid.addWidget(self.d_box,GRID_X_POSITION_DATE,GRID_Y_POSITION_DAY_DATE)
 		grid.addWidget(self.m_box,GRID_X_POSITION_DATE,GRID_Y_POSITION_MONTH_DATE)
 		grid.addWidget(self.y_box,GRID_X_POSITION_DATE,GRID_Y_POSITION_YEAR_DATE)
 		grid.addWidget(self.text_hour,GRID_X_POSITION_TIME,GRID_Y_POSITION_HOUR_TIME)
 		grid.addWidget(self.text_min,GRID_X_POSITION_TIME,GRID_Y_POSITION_MIN_TIME)
 		grid.addWidget(self.text_valido,GRID_X_POSITION_TIME+1,1)
+		grid.addWidget(self.text_tipo,GRID_X_POSITION_TIME+2,1)
 		grid.addWidget(button_insert,GRID_X_POSITION_MODIFY_MARK,GRID_Y_POSITION_MODIFY_MARK)
 		grid.addWidget(button_back,GRID_X_POSITION_BACK_MODIFY_MARK,GRID_Y_POSITION_BACK_MODIFY_MARK)
 
@@ -84,24 +88,29 @@ class modify_mark_view(QDialog):
 		hour=self.text_hour.currentText()
 		min=self.text_min.currentText()
 		tvalido = self.text_valido.isChecked()
+		ttipo=bool(self.text_tipo.currentIndex())
 		str_datetime=datetime_to_str(day,month,year,hour,min)
 		reply=QMessageBox.question(self, 'Message',CREATE_MARK_MODIFY_QUESTION,QMessageBox.Yes,QMessageBox.No)
 		if reply == QMessageBox.Yes:
 			db=get_connection()
 			if(db):
-				self.mark_list[self.mark_index].valido = tvalido
-				self.mark_list[self.mark_index].hora = str_datetime
 				if(controller_mark.has_a_check(self.mark_list[self.mark_index].pin,str_datetime,db,False,self.mark_list[self.mark_index].id)):
 					QMessageBox.warning(self, 'Error',WORKER_HAVE_ALREADY_THIS_MARK, QMessageBox.Ok)
-				elif(controller_mark.valid_date(self.mark_list[self.mark_index].hora)):
+				elif(controller_mark.valid_date(str_datetime)):
 					QMessageBox.warning(self, 'Error',MARK_NO_EXIST_YET, QMessageBox.Ok)
 				elif(self.mark_list[self.mark_index].update(db.cursor())):
+					self.mark_list[self.mark_index].hora = str_datetime
+					self.mark_list[self.mark_index].valido = tvalido
+					self.mark_list[self.mark_index].tipo = ttipo
 					db.commit()
 					db.close()
 					QMessageBox.question(self, 'Message',MOD_MARK_SUCCESS,QMessageBox.Ok)
 					self.close()
 
 	def create_combo_box(self):
+		self.text_tipo.addItem(MARK_TYPE_INTRO_NAME)
+		self.text_tipo.addItem(MARK_TYPE_EXIT_NAME)
+		self.text_tipo.setCurrentIndex(int(self.mark_list[self.mark_index].tipo))
 		actual_date=to_datetime(self.mark_list[self.mark_index].hora,True)
 		for hour in range(0,24):
 			str_hour=str(hour)

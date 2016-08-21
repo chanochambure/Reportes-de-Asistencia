@@ -38,27 +38,39 @@ def get_marks(pin,str_datetime1,str_datetime2,db,validos=False):
 	cursor=db.cursor()
 	list_marks=[]
 	select_marks="""SELECT * FROM Marcacion WHERE pin='%s' and 
-					DATE(Marcacion.hour)>='%s' and DATE(Marcacion.hour)<='%s'"""%(pin,str_datetime1,str_datetime2)
+					DATE(Marcacion.hour)>='%s' and DATE(Marcacion.hour)<='%s'"""%(pin,str_datetime1,plus_one_day(str_datetime2))
 	if(validos):
 		select_marks+=" and valido=1"
 	select_marks+=" ORDER BY hour"
 	cursor.execute(select_marks)
 	for row in cursor:
 		list_marks.append(mark.Marcacion(row))
-	return list_marks
+	val=len(list_marks)
+	con=val-1
+	while(con>=0 and str(to_datetime(list_marks[con].hora,True).date())!=str_datetime2):
+		if(list_marks[con].tipo):
+			val=con+1
+		con-=1
+	return list_marks[0:val]
 
 def get_marks_day(pin,str_datetime1,db,validos=False):
 	cursor=db.cursor()
 	list_marks=[]
 	select_marks="""SELECT * FROM Marcacion WHERE pin='%s' and 
-					DATE(Marcacion.hour)='%s'"""%(pin,str_datetime1)
+					(DATE(Marcacion.hour)='%s' or DATE(Marcacion.hour)='%s')"""%(pin,str_datetime1,plus_one_day(str_datetime1))
 	if(validos):
 		select_marks+=" and valido=1"
 	select_marks+=" ORDER BY hour"
 	cursor.execute(select_marks)
 	for row in cursor:
 		list_marks.append(mark.Marcacion(row))
-	return list_marks
+	val=len(list_marks)
+	con=val-1
+	while(con>=0 and str(to_datetime(list_marks[con].hora,True).date())!=str_datetime1):
+		if(list_marks[con].tipo):
+			val=con+1
+		con-=1
+	return list_marks[0:val]
 
 
 def insert_from_filepath(filepath):
@@ -68,25 +80,35 @@ def insert_from_filepath(filepath):
 	if(db):
 		try:
 			file = open(unicode(filepath),'r')
+			wfile = open(unicode(filepath)+"-NoInserted.csv",'w')
 			cont=0
-			file.readline()
+			wfile.write(file.readline())
 			for line in file:
 				listline=line.split(',')
 				if(len(listline)!=COLUMNS_IN_FILE):
 					return ERROR_FILE
 				str_pin=listline[2]
 				str_pin=str_pin[0:len(str_pin)-1]
+				str_pin=str(str_pin).zfill(PIN_LEN)
 				str_datetime=listline[1]
-				if(controller_trabajador.pin_exist(str_pin,db,True) and valid_date(str_datetime,False)==False):
-					datetime_data=to_datetime_other(str_datetime)
-					if(datetime_data==None):
-						datetime_data=to_datetime(str_datetime,False)
-					if(datetime_data):
-						str_datetime=str(datetime_data)
-						if(has_a_check(str_pin,str_datetime,db)==False):
-							new_mark = mark.Marcacion([0,str_pin,str_datetime,True])
-							if(new_mark.insert(db.cursor())):
-								cont+=1
+				str_tipo=listline[0]
+				cc=cont
+				if(len(str_pin)==PIN_LEN and controller_trabajador.pin_exist(str_pin,db,True) and valid_date(str_datetime,False)==False and valid_tipo(str_tipo)):
+					str_tipo=to_tipo(str_tipo)
+					if(str_tipo!=None):
+						datetime_data=to_datetime_other(str_datetime)
+						if(datetime_data==None):
+							datetime_data=to_datetime(str_datetime,False)
+						if(datetime_data):
+							str_datetime=str(datetime_data)
+							if(has_a_check(str_pin,str_datetime,db)==False):
+								new_mark = mark.Marcacion([0,str_pin,str_datetime,str_tipo,True])
+								if(new_mark.insert(db.cursor())):
+									cont+=1
+				if(cc==cont):
+					wfile.write(line)
+			file.close()
+			wfile.close()
 			db.commit()
 			db.close()
 			return cont

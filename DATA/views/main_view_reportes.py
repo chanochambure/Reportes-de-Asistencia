@@ -10,12 +10,13 @@ from PyQt4.QtGui import *
 BASE_DIR='../'
 sys.path.insert(0,BASE_DIR)
 from constants import *
-from views.reportes import lunchtime_reporte_view,tardanza_reporte_view,horas_reporte_view,horas_area_reporte_view
+from views.reportes import lunchtime_reporte_view,horario_reporte_view,tardanza_reporte_view,horas_reporte_view,horas_area_reporte_view
 from views import search_worker_view
 
 class main_view_reportes(QWidget):
 	def __init__(self):
 		self.ventana_rh=None
+		self.ventana_rhs=None
 		self.ventana_rt=None
 		self.ventana_rl=None
 		self.ventana_rha=None
@@ -26,6 +27,7 @@ class main_view_reportes(QWidget):
 		self.setWindowTitle(MAIN_TITLE)
 		self.show()
 		self.singleton_widget_rh=False
+		self.singleton_widget_rhs=False
 		self.singleton_widget_rt=False
 		self.singleton_widget_rl=False
 
@@ -38,6 +40,7 @@ class main_view_reportes(QWidget):
 		button_reporte_horas = QPushButton(BUTTON_REPORTES_HORAS,self)
 		button_reporte_tardanzas = QPushButton(BUTTON_REPORTES_TARDANZAS,self)
 		button_reporte_lunchtime = QPushButton(BUTTON_REPORTES_LUCHTIME,self)
+		button_reporte_horario = QPushButton(BUTTON_REPORTES_HORARIO,self)
 		button_reporte_horas_area = QPushButton(BUTTON_REPORTES_HORAS_AREA,self)
 		button_exit = QPushButton(BUTTON_EXIT,self)
 
@@ -47,6 +50,7 @@ class main_view_reportes(QWidget):
 		label_title.setFont(font_title)
 		button_exit.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_exit.height())
 		button_reporte_lunchtime.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_lunchtime.height())
+		button_reporte_horario.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_horario.height())
 		button_reporte_tardanzas.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_tardanzas.height())
 		button_reporte_horas.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_horas.height())
 		button_reporte_horas_area.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_horas_area.height())
@@ -54,6 +58,7 @@ class main_view_reportes(QWidget):
 		#FUNCTION
 		self.connect(button_exit, SIGNAL("clicked()"),self.close)
 		self.connect(button_reporte_lunchtime, SIGNAL("clicked()"),self.reporte_lunchtime)
+		self.connect(button_reporte_horario, SIGNAL("clicked()"),self.reporte_horario)
 		self.connect(button_reporte_tardanzas, SIGNAL("clicked()"),self.reporte_tardanzas)
 		self.connect(button_reporte_horas, SIGNAL("clicked()"),self.reporte_horas)
 		self.connect(button_reporte_horas_area, SIGNAL("clicked()"),self.reporte_horas_area)
@@ -66,6 +71,7 @@ class main_view_reportes(QWidget):
 		grid.addWidget(label_title,GRID_X_POSITION_TITLE_R,GRID_Y_POSITION_BUTTON_R)
 		grid.addWidget(button_exit,GRID_X_POSITION_EXIT_R,GRID_Y_POSITION_BUTTON_R)
 		grid.addWidget(button_reporte_lunchtime,GRID_X_POSITION_REPORTE_LUNCHTIME_R,GRID_Y_POSITION_BUTTON)
+		grid.addWidget(button_reporte_horario,GRID_X_POSITION_REPORTE_HORARIO_R,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_reporte_tardanzas,GRID_X_POSITION_REPORTE_TARDANZA_R,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_reporte_horas,GRID_X_POSITION_REPORTE_HORAS_R,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_reporte_horas_area,GRID_X_POSITION_REPORTE_HORAS_A_R,GRID_Y_POSITION_BUTTON)
@@ -114,6 +120,20 @@ class main_view_reportes(QWidget):
 				self.ventana_rl.exec_()
 			self.ventana_rl=None
 			self.singleton_widget_rl=False
+
+	def reporte_horario(self):
+		if(self.singleton_widget_rhs):
+			QMessageBox.warning(self, 'Error',ERROR_A_PROCESS_OPENED, QMessageBox.Ok)
+		else:
+			self.singleton_widget_rhs=True
+			self.ventana_rhs = search_worker_view.search_worker_view(SEARCH_SEE_REPORTES_HORARIO_MESSAGE,False)
+			self.ventana_rhs.exec_()
+			if(self.ventana_rhs.selected):
+				worker = self.ventana_rhs.selected
+				self.ventana_rhs = horario_reporte_view.horario_reporte_view(worker)
+				self.ventana_rhs.exec_()
+			self.ventana_rhs=None
+			self.singleton_widget_rhs=False
 
 	def reporte_horas_area(self):
 		if(self.singleton_widget_rl):

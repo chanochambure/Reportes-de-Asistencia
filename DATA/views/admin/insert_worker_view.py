@@ -123,6 +123,8 @@ class insert_worker_view(QDialog):
 			QMessageBox.warning(self, 'Error',CREATE_WORKER_INVALID_CAMP, QMessageBox.Ok)
 		elif(is_number(pin)==False):
 			QMessageBox.warning(self, 'Error',CREATE_WORKER_INVALID_PIN, QMessageBox.Ok)
+		elif(len(pin)>PIN_LEN):
+			QMessageBox.warning(self, 'Error',CREATE_WORKER_INVALID_LEN, QMessageBox.Ok)
 		elif(is_number(lt_minutes)==False):
 			QMessageBox.warning(self, 'Error',CREATE_WORKER_INVALID_LT_MINUTES, QMessageBox.Ok)
 		else:
@@ -130,6 +132,7 @@ class insert_worker_view(QDialog):
 			if reply == QMessageBox.Yes:
 				db=get_connection()
 				if(db):
+					pin=str(pin).zfill(PIN_LEN)
 					if(controller_trabajador.pin_exist(pin,db)):
 						QMessageBox.warning(self, 'Error',CREATE_WORKER_ALREADY_HAS_BEEN_USED, QMessageBox.Ok)
 					else:

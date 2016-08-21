@@ -37,6 +37,7 @@ class insert_marks_view(QDialog):
 		label_pin = QLabel(ADMIN_NAME_INSERT_MARK)
 		label_date = QLabel(ADMIN_INSERT_MARK_DATE)
 		label_time = QLabel(ADMIN_INSERT_MARK_TIME)
+		label_tipo = QLabel(ADMIN_INSERT_MARK_TYPE)
 		self.text_pin = QLineEdit()
 		self.text_name = QLineEdit()
 		self.d_box = QComboBox()
@@ -44,6 +45,7 @@ class insert_marks_view(QDialog):
 		self.y_box = QComboBox()
 		self.text_hour = QComboBox()
 		self.text_min = QComboBox()
+		self.text_tipo = QComboBox()
 		button_insert = QPushButton(BUTTON_INSERT_MARKS,self)
 		button_back = QPushButton(BUTTON_BACK,self)
 
@@ -74,6 +76,7 @@ class insert_marks_view(QDialog):
 		grid.addWidget(label_pin,GRID_X_POSITION_PIN,GRID_Y_POSITION_LABEL)
 		grid.addWidget(label_date,GRID_X_POSITION_DATE,GRID_Y_POSITION_LABEL)
 		grid.addWidget(label_time,GRID_X_POSITION_TIME,GRID_Y_POSITION_LABEL)
+		grid.addWidget(label_tipo,GRID_X_POSITION_TIPO,GRID_Y_POSITION_LABEL)
 		grid.addWidget(self.text_pin,GRID_X_POSITION_PIN,GRID_Y_POSITION_TEXT)
 		grid.addWidget(self.text_name,GRID_X_POSITION_PIN-1,GRID_Y_POSITION_TEXT_MARKS_NAME,GRID_X_POSITION_PIN,GRID_Y_POSITION_TEXT_MARKS_NAME+2)
 		grid.addWidget(self.d_box,GRID_X_POSITION_DATE,GRID_Y_POSITION_DAY_DATE)
@@ -81,6 +84,7 @@ class insert_marks_view(QDialog):
 		grid.addWidget(self.y_box,GRID_X_POSITION_DATE,GRID_Y_POSITION_YEAR_DATE)
 		grid.addWidget(self.text_hour,GRID_X_POSITION_TIME,GRID_Y_POSITION_HOUR_TIME)
 		grid.addWidget(self.text_min,GRID_X_POSITION_TIME,GRID_Y_POSITION_MIN_TIME)
+		grid.addWidget(self.text_tipo,GRID_X_POSITION_TIPO,GRID_Y_POSITION_TEXT)
 		grid.addWidget(button_insert,GRID_X_POSITION_INSERT_MARK,GRID_Y_POSITION_INSERT_MARK)
 		grid.addWidget(button_back,GRID_X_POSITION_BACK_MARK,GRID_Y_POSITION_BACK_MARK)
 
@@ -93,12 +97,13 @@ class insert_marks_view(QDialog):
 		year=self.y_box.currentText()
 		hour=self.text_hour.currentText()
 		min=self.text_min.currentText()
+		tipo=bool(self.text_tipo.currentIndex())
 		str_datetime=datetime_to_str(day,month,year,hour,min)
 		reply=QMessageBox.question(self, 'Message',CREATE_MARK_QUESTION,QMessageBox.Yes,QMessageBox.No)
 		if reply == QMessageBox.Yes:
 			db=get_connection()
 			if(db):
-				new_mark = mark.Marcacion([0,self.worker.pin,str_datetime,True])
+				new_mark = mark.Marcacion([0,self.worker.pin,str_datetime,tipo,True])
 				if(controller_mark.has_a_check(new_mark.pin,new_mark.hora,db)):
 					QMessageBox.warning(self, 'Error',WORKER_HAVE_ALREADY_THIS_MARK, QMessageBox.Ok)
 				elif(controller_mark.valid_date(new_mark.hora)):
@@ -110,6 +115,9 @@ class insert_marks_view(QDialog):
 					self.close()
 
 	def create_combo_box(self):
+		self.text_tipo.addItem(MARK_TYPE_INTRO_NAME)
+		self.text_tipo.addItem(MARK_TYPE_EXIT_NAME)
+		self.text_tipo.setCurrentIndex(0)
 		actual_date=self.date_ac
 		for hour in range(0,24):
 			str_hour=str(hour)

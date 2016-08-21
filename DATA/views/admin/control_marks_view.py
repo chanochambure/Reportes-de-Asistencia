@@ -137,13 +137,17 @@ class control_marks_view(QDialog):
 			stringVert = []
 			for index_mark in range(len(self.list_marks)):
 				self.marks_table.setItem(index_mark,0, QTableWidgetItem(self.list_marks[index_mark].hora))
-				if(self.list_marks[index_mark].valido):
-					self.marks_table.setItem(index_mark,1, QTableWidgetItem(CONTROL_MARK_ACTIVO))
+				if(self.list_marks[index_mark].tipo):
+					self.marks_table.setItem(index_mark,1, QTableWidgetItem(MARK_TYPE_EXIT_NAME))
 				else:
-					self.marks_table.setItem(index_mark,1, QTableWidgetItem(CONTROL_MARK_INACTIVO))
+					self.marks_table.setItem(index_mark,1, QTableWidgetItem(MARK_TYPE_INTRO_NAME))
+				if(self.list_marks[index_mark].valido):
+					self.marks_table.setItem(index_mark,2, QTableWidgetItem(CONTROL_MARK_ACTIVO))
+				else:
+					self.marks_table.setItem(index_mark,2, QTableWidgetItem(CONTROL_MARK_INACTIVO))
 				self.btn_sell = QPushButton(CONTROL_MARK_SEARCH_MESSAGE)
 				self.btn_sell.clicked.connect(self.modification_mark)
-				self.marks_table.setCellWidget(index_mark,2,self.btn_sell)
+				self.marks_table.setCellWidget(index_mark,3,self.btn_sell)
 				stringVert.append(str(index_mark+1))
 			self.marks_table.setVerticalHeaderLabels(stringVert)
 
