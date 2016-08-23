@@ -24,16 +24,8 @@ def mins_to_str_time(mins,minutos_de_trabajo):
 		real_mins=str(mins-horas*60)
 		if(int(real_mins)<10):
 			real_mins='0'+real_mins
-		dias=int(mins/minutos_de_trabajo)
-		diasd=int(horas/24)
-		if(diasd>0):
-			horas_t=int(minutos_de_trabajo/60)
-			real_mins_t=str(minutos_de_trabajo-horas_t*60)
-			if(int(real_mins_t)<10):
-				real_mins_t='0'+real_mins_t
-			str_tr=str(horas_t)+":"+real_mins_t+" h"
-			return "Dias: "+str(dias)+" - Tiempo por Dia: "+str_tr+" - Tiempo Total: "+str(horas)+":"+real_mins+" h"
-		return str(horas)+":"+real_mins+" h"
+		dias=int(mins*100/minutos_de_trabajo)
+		return "Pocentaje: "+str(dias)+"% - Tiempo: "+str(horas)+":"+real_mins+" h"
 	return "Error Con Marcaciones"
 
 def mins_to_str_time_ot(mins,w_dat=False):

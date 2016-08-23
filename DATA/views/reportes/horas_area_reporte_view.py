@@ -277,6 +277,7 @@ class horas_area_reporte_view(QDialog):
 							value_f= self.reporte_matrix[index_report][2][self.fechas_lista[fecha_index]]
 						self.reporte_table.setItem(index_report,fecha_index+2, QTableWidgetItem(value_f))
 				self.reporte_table.setVerticalHeaderLabels(stringVert)
+				self.reporte_table.resizeColumnsToContents()
 
 	def to_excel(self):
 		dest_filename = unicode(QFileDialog.getSaveFileName(self, SAVE_FILE_TITLE, '', ".xlsx(*.xlsx)"))
