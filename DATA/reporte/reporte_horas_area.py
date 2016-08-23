@@ -18,14 +18,17 @@ def get_reporte_hora_interface(db,worker,str_date1,str_date2):
 	minutos=reporte_horas.get_total_minutes(reporte_matrix)
 	time_to_work=8*60
 	return_value=[{},""]
+	total_time_to_work=0
+	for index_report in range(len(reporte_matrix)):
+		time_lunch=controller_lunchtime.get_lunchtime_minutes_by_date_pin(reporte_matrix[index_report][0],worker.pin,db)
+		hor=controller_horario.get_horario_by_date_pin(reporte_matrix[index_report][0],worker.pin,db)
+		time_to_work=controller_trabajador.get_time_work(hor.entrada,hor.salida,time_lunch)
+		total_time_to_work+=time_to_work
+		return_value[0][reporte_matrix[index_report][0]]=mins_to_str_time(reporte_matrix[index_report][1],time_to_work)
 	if(minutos>-1):
-		time_lunch=controller_lunchtime.get_lunchtime_minutes(worker.idlt,db)
-		time_to_work=controller_trabajador.get_time_work(worker.hora_entrada,worker.hora_salida,time_lunch)
-		return_value[1]=(mins_to_str_time(minutos,time_to_work))
+		return_value[1]=(mins_to_str_time(minutos,total_time_to_work))
 	else:
 		return_value[1]=REPORTE_TOTAL_HORAS_EMPTY
-	for index_report in range(len(reporte_matrix)):
-		return_value[0][reporte_matrix[index_report][0]]=mins_to_str_time(reporte_matrix[index_report][1],time_to_work)
 	return return_value
 
 def get_all_pins(db,id_area,id_tipo):

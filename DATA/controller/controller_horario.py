@@ -42,3 +42,11 @@ def get_horarios(pin,db):
 	for hor in cursor:
 		horario_list.append(horario.Horario(hor))
 	return horario_list
+
+def get_horario_by_date_pin(str_date,pin,db):
+	cursor=db.cursor()
+	select="select * from Horario WHERE pin='%s' and fechavalido<='%s' ORDER BY fechavalido DESC"%(pin,str_date)
+	cursor.execute(select)
+	for hor in cursor:
+		return horario.Horario(hor)
+	return None

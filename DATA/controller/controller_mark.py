@@ -45,15 +45,21 @@ def get_marks(pin,str_datetime1,str_datetime2,db,validos=False):
 	cursor.execute(select_marks)
 	for row in cursor:
 		list_marks.append(mark.Marcacion(row))
-	val=len(list_marks)
-	con=val-1
-	while(con>=0 and str(to_datetime(list_marks[con].hora,True).date())!=str_datetime2):
-		if(list_marks[con].tipo):
-			val=con+1
-		con-=1
-	return list_marks[0:val]
+	if(len(list_marks)):
+		ini=0
+		while(ini<len(list_marks) and list_marks[ini].tipo):
+			ini+=1
+		fin=len(list_marks)-1
+		while(fin>=0 and str(to_datetime(list_marks[fin].hora,True).date())!=str_datetime2):
+			fin-=1
+		val=fin+1
+		if(val<len(list_marks)):
+			if(list_marks[val].tipo):
+				val+=1
+		return list_marks[ini:val]
+	return []
 
-def get_marks_day(pin,str_datetime1,db,validos=False):
+def get_marks_day(pin,str_datetime1,db,validos=False,in_model=True):
 	cursor=db.cursor()
 	list_marks=[]
 	select_marks="""SELECT * FROM Marcacion WHERE pin='%s' and 
@@ -63,15 +69,36 @@ def get_marks_day(pin,str_datetime1,db,validos=False):
 	select_marks+=" ORDER BY hour"
 	cursor.execute(select_marks)
 	for row in cursor:
-		list_marks.append(mark.Marcacion(row))
-	val=len(list_marks)
-	con=val-1
-	while(con>=0 and str(to_datetime(list_marks[con].hora,True).date())!=str_datetime1):
-		if(list_marks[con].tipo):
-			val=con+1
-		con-=1
-	return list_marks[0:val]
-
+		if(in_model):
+			list_marks.append(mark.Marcacion(row))
+		else:
+			list_marks.append(row)
+	if(len(list_marks)):
+		if(in_model):
+			ini=0
+			while(ini<len(list_marks) and list_marks[ini].tipo):
+				ini+=1
+			fin=len(list_marks)-1
+			while(fin>=0 and str(to_datetime(list_marks[fin].hora,True).date())!=str_datetime1):
+				fin-=1
+			val=fin+1
+			if(val<len(list_marks)):
+				if(list_marks[val].tipo):
+					val+=1
+			return list_marks[ini:val]
+		else:
+			ini=0
+			while(ini<len(list_marks) and list_marks[ini][3]):
+				ini+=1
+			fin=len(list_marks)-1
+			while(fin>=0 and str(list_marks[fin][2].date())!=str_datetime1):
+				fin-=1
+			val=fin+1
+			if(val<len(list_marks)):
+				if(list_marks[val][3]):
+					val+=1
+			return list_marks[ini:val]
+	return []
 
 def insert_from_filepath(filepath):
 	if(filepath.length()==0):

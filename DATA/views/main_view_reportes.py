@@ -38,7 +38,7 @@ class main_view_reportes(QWidget):
 		#WIDGETS
 		label_title = QLabel(MAIN_VIEW_TITLE_REPORTES)
 		button_reporte_horas = QPushButton(BUTTON_REPORTES_HORAS,self)
-		button_reporte_tardanzas = QPushButton(BUTTON_REPORTES_TARDANZAS,self)
+		#button_reporte_tardanzas = QPushButton(BUTTON_REPORTES_TARDANZAS,self)
 		button_reporte_lunchtime = QPushButton(BUTTON_REPORTES_LUCHTIME,self)
 		button_reporte_horario = QPushButton(BUTTON_REPORTES_HORARIO,self)
 		button_reporte_horas_area = QPushButton(BUTTON_REPORTES_HORAS_AREA,self)
@@ -51,7 +51,7 @@ class main_view_reportes(QWidget):
 		button_exit.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_exit.height())
 		button_reporte_lunchtime.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_lunchtime.height())
 		button_reporte_horario.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_horario.height())
-		button_reporte_tardanzas.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_tardanzas.height())
+		#button_reporte_tardanzas.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_tardanzas.height())
 		button_reporte_horas.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_horas.height())
 		button_reporte_horas_area.setFixedSize(BUTTON_SIZE_MAIN_VIEW,button_reporte_horas_area.height())
 
@@ -59,7 +59,7 @@ class main_view_reportes(QWidget):
 		self.connect(button_exit, SIGNAL("clicked()"),self.close)
 		self.connect(button_reporte_lunchtime, SIGNAL("clicked()"),self.reporte_lunchtime)
 		self.connect(button_reporte_horario, SIGNAL("clicked()"),self.reporte_horario)
-		self.connect(button_reporte_tardanzas, SIGNAL("clicked()"),self.reporte_tardanzas)
+		#self.connect(button_reporte_tardanzas, SIGNAL("clicked()"),self.reporte_tardanzas)
 		self.connect(button_reporte_horas, SIGNAL("clicked()"),self.reporte_horas)
 		self.connect(button_reporte_horas_area, SIGNAL("clicked()"),self.reporte_horas_area)
 
@@ -72,7 +72,7 @@ class main_view_reportes(QWidget):
 		grid.addWidget(button_exit,GRID_X_POSITION_EXIT_R,GRID_Y_POSITION_BUTTON_R)
 		grid.addWidget(button_reporte_lunchtime,GRID_X_POSITION_REPORTE_LUNCHTIME_R,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_reporte_horario,GRID_X_POSITION_REPORTE_HORARIO_R,GRID_Y_POSITION_BUTTON)
-		grid.addWidget(button_reporte_tardanzas,GRID_X_POSITION_REPORTE_TARDANZA_R,GRID_Y_POSITION_BUTTON)
+		#grid.addWidget(button_reporte_tardanzas,GRID_X_POSITION_REPORTE_TARDANZA_R,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_reporte_horas,GRID_X_POSITION_REPORTE_HORAS_R,GRID_Y_POSITION_BUTTON)
 		grid.addWidget(button_reporte_horas_area,GRID_X_POSITION_REPORTE_HORAS_A_R,GRID_Y_POSITION_BUTTON)
 

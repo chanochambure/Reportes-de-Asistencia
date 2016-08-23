@@ -34,7 +34,7 @@ def mins_to_str_time(mins,minutos_de_trabajo):
 			str_tr=str(horas_t)+":"+real_mins_t+" h"
 			return "Dias: "+str(dias)+" - Tiempo por Dia: "+str_tr+" - Tiempo Total: "+str(horas)+":"+real_mins+" h"
 		return str(horas)+":"+real_mins+" h"
-	return "Error - Faltan Marcaciones"
+	return "Error Con Marcaciones"
 
 def mins_to_str_time_ot(mins,w_dat=False):
 	if(mins!=None):

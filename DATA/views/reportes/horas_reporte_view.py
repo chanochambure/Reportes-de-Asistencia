@@ -14,7 +14,7 @@ BASE_DIR='../../'
 sys.path.insert(0,BASE_DIR)
 from constants import *
 from models import mark,lunchtime,trabajador
-from controller import controller_lunchtime,controller_trabajador
+from controller import controller_lunchtime,controller_trabajador,controller_horario
 from views.admin import control_marks_view
 from views import control_single_mark_view
 from reporte import reporte_horas
@@ -286,20 +286,17 @@ class horas_reporte_view(QDialog):
 
 	def insert_reporte_table(self):
 		self.clear_reporte_table()
-		if(self.minutos>-1):
-			db=get_connection()
-			time_lunch=controller_lunchtime.get_lunchtime_minutes(self.worker.idlt,db)
-			if(db):
-				db.close()
-			self.time_to_work=controller_trabajador.get_time_work(self.worker.hora_entrada,self.worker.hora_salida,time_lunch)
-			self.text_total_horas.setText(mins_to_str_time(self.minutos,self.time_to_work))
-		else:
-			self.text_total_horas.setText(REPORTE_TOTAL_HORAS_EMPTY)
 		if(len(self.reporte_matrix)):
 			self.rows = len(self.reporte_matrix)
 			self.reporte_table.setRowCount(self.rows)
 			stringVert = []
+			db=get_connection()
+			self.total_time_to_work=0
 			for index_report in range(len(self.reporte_matrix)):
+				time_lunch=controller_lunchtime.get_lunchtime_minutes_by_date_pin(self.reporte_matrix[index_report][0],self.worker.pin,db)
+				hor=controller_horario.get_horario_by_date_pin(self.reporte_matrix[index_report][0],self.worker.pin,db)
+				self.time_to_work=controller_trabajador.get_time_work(hor.entrada,hor.salida,time_lunch)
+				self.total_time_to_work+=self.time_to_work
 				self.reporte_table.setItem(index_report,0, QTableWidgetItem(self.reporte_matrix[index_report][0]))
 				self.reporte_table.setItem(index_report,1, QTableWidgetItem(mins_to_str_time(self.reporte_matrix[index_report][1],self.time_to_work)))
 				self.btn_sell = QPushButton(MODIFICAR_REPORTE_MARKS)
@@ -307,6 +304,11 @@ class horas_reporte_view(QDialog):
 				self.reporte_table.setCellWidget(index_report,2,self.btn_sell)
 				stringVert.append(str(index_report+1))
 			self.reporte_table.setVerticalHeaderLabels(stringVert)
+			db.close()
+		if(self.minutos>-1):
+			self.text_total_horas.setText(mins_to_str_time(self.minutos,self.total_time_to_work))
+		else:
+			self.text_total_horas.setText(REPORTE_TOTAL_HORAS_EMPTY)
 
 	def clear_reporte_table(self):
 		self.reporte_table.clear();

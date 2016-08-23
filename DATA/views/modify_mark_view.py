@@ -98,14 +98,15 @@ class modify_mark_view(QDialog):
 					QMessageBox.warning(self, 'Error',WORKER_HAVE_ALREADY_THIS_MARK, QMessageBox.Ok)
 				elif(controller_mark.valid_date(str_datetime)):
 					QMessageBox.warning(self, 'Error',MARK_NO_EXIST_YET, QMessageBox.Ok)
-				elif(self.mark_list[self.mark_index].update(db.cursor())):
+				else:
 					self.mark_list[self.mark_index].hora = str_datetime
 					self.mark_list[self.mark_index].valido = tvalido
 					self.mark_list[self.mark_index].tipo = ttipo
-					db.commit()
-					db.close()
-					QMessageBox.question(self, 'Message',MOD_MARK_SUCCESS,QMessageBox.Ok)
-					self.close()
+					if(self.mark_list[self.mark_index].update(db.cursor())):
+						db.commit()
+						db.close()
+						QMessageBox.question(self, 'Message',MOD_MARK_SUCCESS,QMessageBox.Ok)
+						self.close()
 
 	def create_combo_box(self):
 		self.text_tipo.addItem(MARK_TYPE_INTRO_NAME)

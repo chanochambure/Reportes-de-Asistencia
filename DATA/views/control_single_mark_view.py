@@ -123,9 +123,9 @@ class control_single_mark_view(QDialog):
 			for index_mark in range(len(self.list_marks)):
 				self.marks_table.setItem(index_mark,0, QTableWidgetItem(self.list_marks[index_mark].hora))
 				if(self.list_marks[index_mark].tipo):
-					self.marks_table.setItem(index_mark,1, QTableWidgetItem(MARK_TYPE_INTRO_NAME))
-				else:
 					self.marks_table.setItem(index_mark,1, QTableWidgetItem(MARK_TYPE_EXIT_NAME))
+				else:
+					self.marks_table.setItem(index_mark,1, QTableWidgetItem(MARK_TYPE_INTRO_NAME))
 				if(self.list_marks[index_mark].valido):
 					self.marks_table.setItem(index_mark,2, QTableWidgetItem(CONTROL_MARK_ACTIVO))
 				else:
