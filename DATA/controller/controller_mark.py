@@ -45,19 +45,7 @@ def get_marks(pin,str_datetime1,str_datetime2,db,validos=False):
 	cursor.execute(select_marks)
 	for row in cursor:
 		list_marks.append(mark.Marcacion(row))
-	if(len(list_marks)):
-		ini=0
-		while(ini<len(list_marks) and list_marks[ini].tipo):
-			ini+=1
-		fin=len(list_marks)-1
-		while(fin>=0 and str(to_datetime(list_marks[fin].hora,True).date())!=str_datetime2):
-			fin-=1
-		val=fin+1
-		if(val<len(list_marks)):
-			if(list_marks[val].tipo):
-				val+=1
-		return list_marks[ini:val]
-	return []
+	return list_marks
 
 def get_marks_day(pin,str_datetime1,db,validos=False,in_model=True):
 	cursor=db.cursor()
@@ -83,7 +71,7 @@ def get_marks_day(pin,str_datetime1,db,validos=False,in_model=True):
 				fin-=1
 			val=fin+1
 			if(val<len(list_marks)):
-				if(list_marks[val].tipo):
+				if(list_marks[val].tipo and list_marks[fin].tipo==False):
 					val+=1
 			return list_marks[ini:val]
 		else:
@@ -95,7 +83,7 @@ def get_marks_day(pin,str_datetime1,db,validos=False,in_model=True):
 				fin-=1
 			val=fin+1
 			if(val<len(list_marks)):
-				if(list_marks[val][3]):
+				if(list_marks[val][3] and list_marks[fin][3]==False):
 					val+=1
 			return list_marks[ini:val]
 	return []
