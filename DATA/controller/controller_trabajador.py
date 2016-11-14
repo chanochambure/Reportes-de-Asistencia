@@ -13,6 +13,8 @@ from constants import *
 def get_time_work(str_time1,str_time2,lunchtime_minutes):
 	strt1=to_datetime("2001-1-1 "+str_time1,True)
 	strt2=to_datetime("2001-1-1 "+str_time2,True)
+	if(strt1>strt2)
+		strt2=to_datetime("2001-1-2 "+str_time2,True)
 	work_time=int((strt2-strt1).seconds/60)
 	return (work_time)-(lunchtime_minutes)
 
